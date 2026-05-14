@@ -741,32 +741,74 @@ console.log('[SYS] 최종 로드:',SYS_DATA.length+'건');document.getElementByI
 function fetchCmAndSys(rows,source){
   var cmDone=false,sysDone=false,fseDone=false,brickDone=false;
   var sysRowsResult=[];
+
   function tryStart(){
     if(cmDone&&sysDone&&fseDone&&brickDone)
       buildRowsAndStart(rows,source,sysRowsResult);
   }
+
   function safeFetch(url,onDone){
     var done=false;
     var timer=setTimeout(function(){
-      if(!done){done=true;console.warn('[TIMEOUT]',url);onDone();}
+      if(!done){done=true;console.warn('[TIMEOUT]',url);onDone(null);}
     },25000);
     fetch(url,{cache:'no-store'})
       .then(function(r){return r.ok?r.text():Promise.reject(r.status);})
       .then(function(t){if(!done){done=true;clearTimeout(timer);onDone(t);}})
-      .catch(function(e){if(!done){done=true;clearTimeout(timer);console.warn('[FETCH ERR]',e);onDone();}});
+      .catch(function(e){if(!done){done=true;clearTimeout(timer);console.warn('[FETCH ERR]',e);onDone(null);}});
   }
+
+  // 페이지네이션으로 전체 데이터 로드
+  function fetchAllPages(sheetName,onComplete){
+    var allRows=[];
+    function fetchPage(page){
+      var url=GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(sheetName)+'&page='+page+'&pageSize=2000&t='+Date.now();
+      safeFetch(url,function(t){
+        if(!t){onComplete(allRows);return;}
+        try{
+          var j=JSON.parse(t);
+          if(j.rows&&j.rows.length)allRows=allRows.concat(j.rows);
+          if(j.hasMore){
+            fetchPage(page+1);
+          }else{
+            onComplete(allRows);
+          }
+        }catch(e){
+          console.warn('[PARSE ERR]',sheetName,e);
+          onComplete(allRows);
+        }
+      });
+    }
+    fetchPage(0);
+  }
+
+  // CUSTOMER_MASTER
   safeFetch(GS_APPS_SCRIPT_URL+'?sheet=CUSTOMER_MASTER&t='+Date.now(),function(t){
     if(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){CM_MAP={};j.rows.forEach(function(cr){var k=String(cr['Account Name']||'').trim();var v=String(cr['Billing Street']||'').trim();if(k&&v)CM_MAP[k]=v;});}}catch(e){console.warn('[CM]',e);}}
     cmDone=true;tryStart();});
+
+  // SYS_DATA
   safeFetch(GS_APPS_SCRIPT_URL+'?sheet='+GS_SYS_SHEET+'&t='+Date.now(),function(t){
     if(t){try{var j=JSON.parse(t);sysRowsResult=j.rows||[];}catch(e){console.warn('[SYS]',e);}}
     sysDone=true;tryStart();});
-  safeFetch(GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_FSE_SHEET)+'&t='+Date.now(),function(t){
-    if(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){FSE_DATA=parseFseRows(j.rows);FILT_FSE=FSE_DATA.slice();}}catch(e){console.warn('[FSE]',e);}}
-    fseDone=true;tryStart();});
-  safeFetch(GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_BRICK_SHEET)+'&t='+Date.now(),function(t){
-    if(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){BRICK_DATA=parseBrickRows(j.rows);FILT_BRICK=BRICK_DATA.slice();}}catch(e){console.warn('[BRICK]',e);}}
-    brickDone=true;tryStart();});
+
+  // FSE_DATA - 페이지네이션
+  fetchAllPages(GS_FSE_SHEET,function(allRows){
+    if(allRows.length){
+      try{FSE_DATA=parseFseRows(allRows);FILT_FSE=FSE_DATA.slice();console.log('[FSE] 총',allRows.length,'행 로드');}
+      catch(e){console.warn('[FSE]',e);}
+    }
+    fseDone=true;tryStart();
+  });
+
+  // BRICK_DATA - 페이지네이션
+  fetchAllPages(GS_BRICK_SHEET,function(allRows){
+    if(allRows.length){
+      try{BRICK_DATA=parseBrickRows(allRows);FILT_BRICK=BRICK_DATA.slice();console.log('[BRICK] 총',allRows.length,'행 로드');}
+      catch(e){console.warn('[BRICK]',e);}
+    }
+    brickDone=true;tryStart();
+  });
 }
 
 function parseAndStart(txt,source){try{var rows;if(txt.trim().startsWith('{')){var json=JSON.parse(txt);if(json.error)throw new Error('Apps Script 오류: '+json.error);rows=json.rows;if(!rows||!rows.length)throw new Error('데이터가 비어 있습니다 (Apps Script)');if(GS_APPS_SCRIPT_URL){fetchCmAndSys(rows,source);return;}}else{var wb=XLSX.read(txt,{type:'string',raw:false});var ws=wb.Sheets[wb.SheetNames[0]];rows=XLSX.utils.sheet_to_json(ws,{defval:''});if(!rows.length)throw new Error('데이터가 비어 있습니다 (CSV)');}
