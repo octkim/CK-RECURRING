@@ -737,12 +737,35 @@ var msg='연결 실패 — 수동 업로드 화면으로 전환합니다.\n\n【
 showGsErrorGuide(details);var us=document.getElementById('upload-screen');var ap=document.getElementById('app');if(us)us.style.display='flex';if(ap)ap.style.display='none';}
 function buildRowsAndStart(rows,source,sysRows){RAW=parseRows(rows);if(sysRows&&sysRows.length){SYS_DATA=parseSysRows(sysRows);}else{SYS_DATA=parseSysRows(rows);}
 console.log('[SYS] 최종 로드:',SYS_DATA.length+'건');document.getElementById('tb-filename').textContent='구글 시트 ('+source+')';setOk(RAW.length,source);startDashboard(false);}
-function fetchCmAndSys(rows,source){var cmDone=false,sysDone=false;var sysRowsResult=[];function tryStart(){if(cmDone&&sysDone)buildRowsAndStart(rows,source,sysRowsResult);}
-fetch(GS_APPS_SCRIPT_URL+'?sheet=CUSTOMER_MASTER&t='+Date.now(),{cache:'no-store'}).then(function(r2){return r2.ok?r2.text():Promise.reject('HTTP '+r2.status);}).then(function(cmTxt){try{var cmJson=JSON.parse(cmTxt);if(cmJson.rows&&cmJson.rows.length){CM_MAP={};cmJson.rows.forEach(function(cr){var k=String(cr['Account Name']||cr['Account_Name']||'').trim();var v=String(cr['Billing Street']||cr['Billing_Street']||'').trim();if(k&&v)CM_MAP[k]=v;});console.log('[CM] 로드 완료:',Object.keys(CM_MAP).length+'개');}}catch(e2){console.warn('[CM] 파싱 실패:',e2);}
-cmDone=true;tryStart();}).catch(function(e3){console.warn('[CM] 요청 실패:',e3);cmDone=true;tryStart();});fetch(GS_APPS_SCRIPT_URL+'?sheet='+GS_SYS_SHEET+'&t='+Date.now(),{cache:'no-store'}).then(function(rs){return rs.ok?rs.text():Promise.reject(rs.status);}).then(function(st){try{var sj=JSON.parse(st);sysRowsResult=sj.rows||[];console.log('[SYS] 로드 완료:',sysRowsResult.length+'건');}catch(e4){console.warn('[SYS] 파싱 실패:',e4);}
-sysDone=true;tryStart();}).catch(function(e5){console.warn('[SYS] 요청 실패:',e5);sysDone=true;tryStart();});var fseDone=false;var origTryStart=tryStart;tryStart=function(){if(cmDone&&sysDone&&fseDone)buildRowsAndStart(rows,source,sysRowsResult);};fetch(GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_FSE_SHEET)+'&t='+Date.now(),{cache:'no-store'}).then(function(rf){return rf.ok?rf.text():Promise.reject(rf.status);}).then(function(ft){try{var fj=JSON.parse(ft);if(fj.rows&&fj.rows.length){FSE_DATA=parseFseRows(fj.rows);console.log('[FSE] 로드 완료:',FSE_DATA.length+'건');}}catch(e6){console.warn('[FSE] 파싱 실패:',e6);}
-fseDone=true;tryStart();}).catch(function(e7){console.warn('[FSE] 요청 실패:',e7);fseDone=true;tryStart();});var brickDone=false;var prevTryStart2=tryStart;tryStart=function(){if(cmDone&&sysDone&&fseDone&&brickDone)buildRowsAndStart(rows,source,sysRowsResult);};fetch(GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_BRICK_SHEET)+'&t='+Date.now(),{cache:'no-store'}).then(function(rb){return rb.ok?rb.text():Promise.reject(rb.status);}).then(function(bt){try{var bj=JSON.parse(bt);if(bj.rows&&bj.rows.length){BRICK_DATA=parseBrickRows(bj.rows);FILT_BRICK=BRICK_DATA.slice();console.log('[BRICK] 로드 완료:',BRICK_DATA.length+'건');}}catch(e8){console.warn('[BRICK] 파싱 실패:',e8);}
-brickDone=true;tryStart();}).catch(function(e9){console.warn('[BRICK] 요청 실패:',e9);brickDone=true;tryStart();});}
+function fetchCmAndSys(rows,source){
+  var cmDone=false,sysDone=false,fseDone=false,brickDone=false;
+  var sysRowsResult=[];
+  function tryStart(){
+    if(cmDone&&sysDone&&fseDone&&brickDone)
+      buildRowsAndStart(rows,source,sysRowsResult);
+  }
+  // CUSTOMER_MASTER
+  fetch(GS_APPS_SCRIPT_URL+'?sheet=CUSTOMER_MASTER&t='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.text():Promise.reject('HTTP '+r.status);})
+    .then(function(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){CM_MAP={};j.rows.forEach(function(cr){var k=String(cr['Account Name']||'').trim();var v=String(cr['Billing Street']||'').trim();if(k&&v)CM_MAP[k]=v;});}}catch(e){console.warn('[CM]',e);}cmDone=true;tryStart();})
+    .catch(function(e){console.warn('[CM]',e);cmDone=true;tryStart();});
+  // SYS_DATA
+  fetch(GS_APPS_SCRIPT_URL+'?sheet='+GS_SYS_SHEET+'&t='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.text():Promise.reject(r.status);})
+    .then(function(t){try{var j=JSON.parse(t);sysRowsResult=j.rows||[];}catch(e){console.warn('[SYS]',e);}sysDone=true;tryStart();})
+    .catch(function(e){console.warn('[SYS]',e);sysDone=true;tryStart();});
+  // FSE_DATA
+  fetch(GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_FSE_SHEET)+'&t='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.text():Promise.reject(r.status);})
+    .then(function(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){FSE_DATA=parseFseRows(j.rows);FILT_FSE=FSE_DATA.slice();}}catch(e){console.warn('[FSE]',e);}fseDone=true;tryStart();})
+    .catch(function(e){console.warn('[FSE]',e);fseDone=true;tryStart();});
+  // BRICK_DATA
+  fetch(GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_BRICK_SHEET)+'&t='+Date.now(),{cache:'no-store'})
+    .then(function(r){return r.ok?r.text():Promise.reject(r.status);})
+    .then(function(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){BRICK_DATA=parseBrickRows(j.rows);FILT_BRICK=BRICK_DATA.slice();}}catch(e){console.warn('[BRICK]',e);}brickDone=true;tryStart();})
+    .catch(function(e){console.warn('[BRICK]',e);brickDone=true;tryStart();});
+}
+
 function parseAndStart(txt,source){try{var rows;if(txt.trim().startsWith('{')){var json=JSON.parse(txt);if(json.error)throw new Error('Apps Script 오류: '+json.error);rows=json.rows;if(!rows||!rows.length)throw new Error('데이터가 비어 있습니다 (Apps Script)');if(GS_APPS_SCRIPT_URL&&GS_APPS_SCRIPT_URL.length>3){fetchCmAndSys(rows,source);return;}}else{var wb=XLSX.read(txt,{type:'string',raw:false});var ws=wb.Sheets[wb.SheetNames[0]];rows=XLSX.utils.sheet_to_json(ws,{defval:''});if(!rows.length)throw new Error('데이터가 비어 있습니다 (CSV)');}
 buildRowsAndStart(rows,source);}catch(e){setFail('파싱 오류: '+e.message);}}
 var urls=[{url:GS_APPS_SCRIPT_URL+'?sheet=RAW_DATA',label:'구글 시트 연동 중...'}].filter(function(u){return u.url&&u.url.length>3;});if(!urls.length){setFail('GS_PUB_URL과 GS_GVIZ_URL이 모두 비어 있습니다. 코드의 GS_SHEET_ID를 확인하세요.');return;}
