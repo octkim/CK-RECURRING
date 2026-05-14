@@ -720,7 +720,7 @@ tr:hover td{background:rgba(9,132,227,.04);}
 </div>
 
 <script>
-let RAW=[];var RATE_CODES={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1};var MAIN={FIN101110:1,'1600-00-0219':1};var PROMO={FIN101098:1,'1600-00-0218':1};var CAN={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1,'1600-00-0210':1};var TIP_KW=['SubQ','SubRF','Sublative','Profound','eMatrix','eTwo','elos Plus','elos X'];var TIP_SYS_KW=[{key:'Profound',label:'Profound'},{key:'SubQ',label:'SubQ'},{key:'SubRF',label:'SubRF'},{key:'Sublative',label:'Sublative'},{key:'eMatrix',label:'eMatrix'},{key:'eTwo',label:'eTwo'},{key:'elos',label:'elos Plus/X'},];var FILT=[],charts={},sortSt={},_modalRows=[],_accDetChart=null,_gmap={};var CM_MAP={};var SYS_DATA=[];var FSE_DATA=[];var FILT_FSE=[];var _fsePeriod='q';var BRICK_DATA=[];var FILT_BRICK=[];var _brickPeriod='q';var GMPP_DCD_DATA={"qtrs":["2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1"],"gmpp":{"2022Q2":1,"2022Q3":5,"2022Q4":14,"2023Q1":10,"2023Q2":6,"2023Q3":16,"2023Q4":11,"2024Q1":14,"2024Q2":29,"2024Q3":27,"2024Q4":31,"2025Q1":36,"2025Q2":37,"2025Q3":34,"2025Q4":35,"2026Q1":52},"dcd":{"2022Q2":2,"2022Q3":12,"2022Q4":40,"2023Q1":27,"2023Q2":13,"2023Q3":39,"2023Q4":28,"2024Q1":31,"2024Q2":77,"2024Q3":64,"2024Q4":66,"2025Q1":81,"2025Q2":97,"2025Q3":92,"2025Q4":82,"2026Q1":122}};var _sysMode='q',_sysView='all';var SYS_STATIC_DATA={"qtrs":["2018Q4","2019Q1","2019Q2","2019Q3","2019Q4","2020Q1","2020Q2","2020Q3","2020Q4","2021Q1","2021Q2","2021Q3","2021Q4","2022Q1","2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1"],"brands":["GMPP","VBP","PICOWAY LASER","GMP","VBP (Rose)","Cryo 7","VBP (Grey)","GLP","Profound System","Nordlys","Nordlys Mini","VB PRIMA"],"matrix":{"2018Q4":{"PICOWAY LASER":3,"GMP":7,"VBP (Rose)":9,"VBP (Grey)":1},"2019Q1":{"PICOWAY LASER":2,"GMP":3,"VBP (Rose)":13},"2019Q2":{"VBP":1,"PICOWAY LASER":4,"GMP":2,"VBP (Rose)":9,"GLP":2},"2019Q3":{"PICOWAY LASER":4,"GMP":5,"VBP (Rose)":12,"GLP":2,"Nordlys":3},"2019Q4":{"VBP":1,"PICOWAY LASER":3,"GMP":4,"VBP (Rose)":13,"GLP":0,"Profound System":1,"Nordlys":6},"2020Q1":{"PICOWAY LASER":2,"GMP":2,"VBP (Rose)":3,"GLP":1,"Nordlys":2},"2020Q2":{"PICOWAY LASER":2,"GMP":1,"VBP (Rose)":3,"GLP":3},"2020Q3":{"PICOWAY LASER":4,"GMP":4,"VBP (Rose)":9,"GLP":2,"Nordlys":3},"2020Q4":{"PICOWAY LASER":4,"GMP":3,"VBP (Rose)":7,"VBP (Grey)":1,"GLP":3,"Profound System":2},"2021Q1":{"PICOWAY LASER":3,"GMP":3,"VBP (Rose)":2,"GLP":3},"2021Q2":{"PICOWAY LASER":5,"GMP":7,"VBP (Rose)":1,"VBP (Grey)":1,"GLP":2,"VB PRIMA":2},"2021Q3":{"PICOWAY LASER":2,"GMP":3,"VBP (Grey)":13,"GLP":2,"Profound System":5,"VB PRIMA":3},"2021Q4":{"PICOWAY LASER":6,"GMP":3,"VBP (Grey)":11,"GLP":3,"VB PRIMA":6},"2022Q1":{"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":9,"GLP":3,"Nordlys":1,"VB PRIMA":1},"2022Q2":{"GMPP":1,"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":10,"GLP":1,"Profound System":5,"Nordlys":1},"2022Q3":{"GMPP":6,"VBP":9,"PICOWAY LASER":4,"GMP":6,"VBP (Grey)":1,"GLP":2,"Nordlys":1},"2022Q4":{"GMPP":16,"VBP":8,"PICOWAY LASER":5,"GMP":5,"Nordlys Mini":1},"2023Q1":{"GMPP":11,"VBP":8,"PICOWAY LASER":3,"GMP":1,"Profound System":5,"Nordlys":1,"Nordlys Mini":2},"2023Q2":{"GMPP":7,"VBP":13,"PICOWAY LASER":4,"GMP":3,"Cryo 7":4,"GLP":3,"Nordlys Mini":2},"2023Q3":{"GMPP":18,"VBP":14,"GMP":4,"Nordlys Mini":2},"2023Q4":{"GMPP":12,"VBP":18,"PICOWAY LASER":2,"GMP":3,"Cryo 7":2,"Profound System":1,"Nordlys Mini":2},"2024Q1":{"GMPP":16,"VBP":11,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"GLP":1,"Nordlys Mini":1},"2024Q2":{"GMPP":33,"VBP":10,"PICOWAY LASER":3,"GMP":2,"Cryo 7":3},"2024Q3":{"GMPP":30,"VBP":9,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"Profound System":4,"Nordlys Mini":2},"2024Q4":{"GMPP":35,"VBP":7,"PICOWAY LASER":2,"GMP":2,"Cryo 7":8,"GLP":1},"2025Q1":{"GMPP":38,"VBP":7,"PICOWAY LASER":3,"GMP":1,"Cryo 7":7,"Profound System":3,"Nordlys":1},"2025Q2":{"GMPP":32,"VBP":7,"PICOWAY LASER":1,"GMP":2,"Cryo 7":11,"Nordlys":1,"Nordlys Mini":4},"2025Q3":{"GMPP":27,"VBP":10,"PICOWAY LASER":2,"GMP":1,"Cryo 7":11,"Nordlys Mini":2},"2025Q4":{"GMPP":32,"VBP":12,"PICOWAY LASER":2,"GMP":1,"Cryo 7":8},"2026Q1":{"GMPP":44,"VBP":7,"PICOWAY LASER":2,"Cryo 7":15}},"totals":{"Cryo 7":71,"GLP":34,"GMP":90,"GMPP":358,"Nordlys":20,"Nordlys Mini":18,"PICOWAY LASER":93,"Profound System":26,"VB PRIMA":12,"VBP":152,"VBP (Grey)":47,"VBP (Rose)":81}};function calcRev(code,total){return(RATE_CODES[code]&&total>0)?total*0.1:total;}
+let RAW=[];var RATE_CODES={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1};var MAIN={FIN101110:1,'1600-00-0219':1};var PROMO={FIN101098:1,'1600-00-0218':1};var CAN={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1,'1600-00-0210':1};var TIP_KW=['SubQ','SubRF','Sublative','Profound','eMatrix','eTwo','elos Plus','elos X'];var TIP_SYS_KW=[{key:'Profound',label:'Profound'},{key:'SubQ',label:'SubQ'},{key:'SubRF',label:'SubRF'},{key:'Sublative',label:'Sublative'},{key:'eMatrix',label:'eMatrix'},{key:'eTwo',label:'eTwo'},{key:'elos',label:'elos Plus/X'},];var FILT=[],charts={},sortSt={},_modalRows=[],_accDetChart=null,_gmap={};var CM_MAP={};var SYS_DATA=[];var FSE_DATA=[];var FILT_FSE=[];var _fsePeriod='q';var BRICK_DATA=[];var FILT_BRICK=[];var _brickPeriod='q';var _fseLoading=false;var _fseProgress={cur:0,total:0};var _brickLoading=false;var _brickProgress={cur:0,total:0};var GMPP_DCD_DATA={"qtrs":["2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1"],"gmpp":{"2022Q2":1,"2022Q3":5,"2022Q4":14,"2023Q1":10,"2023Q2":6,"2023Q3":16,"2023Q4":11,"2024Q1":14,"2024Q2":29,"2024Q3":27,"2024Q4":31,"2025Q1":36,"2025Q2":37,"2025Q3":34,"2025Q4":35,"2026Q1":52},"dcd":{"2022Q2":2,"2022Q3":12,"2022Q4":40,"2023Q1":27,"2023Q2":13,"2023Q3":39,"2023Q4":28,"2024Q1":31,"2024Q2":77,"2024Q3":64,"2024Q4":66,"2025Q1":81,"2025Q2":97,"2025Q3":92,"2025Q4":82,"2026Q1":122}};var _sysMode='q',_sysView='all';var SYS_STATIC_DATA={"qtrs":["2018Q4","2019Q1","2019Q2","2019Q3","2019Q4","2020Q1","2020Q2","2020Q3","2020Q4","2021Q1","2021Q2","2021Q3","2021Q4","2022Q1","2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1"],"brands":["GMPP","VBP","PICOWAY LASER","GMP","VBP (Rose)","Cryo 7","VBP (Grey)","GLP","Profound System","Nordlys","Nordlys Mini","VB PRIMA"],"matrix":{"2018Q4":{"PICOWAY LASER":3,"GMP":7,"VBP (Rose)":9,"VBP (Grey)":1},"2019Q1":{"PICOWAY LASER":2,"GMP":3,"VBP (Rose)":13},"2019Q2":{"VBP":1,"PICOWAY LASER":4,"GMP":2,"VBP (Rose)":9,"GLP":2},"2019Q3":{"PICOWAY LASER":4,"GMP":5,"VBP (Rose)":12,"GLP":2,"Nordlys":3},"2019Q4":{"VBP":1,"PICOWAY LASER":3,"GMP":4,"VBP (Rose)":13,"GLP":0,"Profound System":1,"Nordlys":6},"2020Q1":{"PICOWAY LASER":2,"GMP":2,"VBP (Rose)":3,"GLP":1,"Nordlys":2},"2020Q2":{"PICOWAY LASER":2,"GMP":1,"VBP (Rose)":3,"GLP":3},"2020Q3":{"PICOWAY LASER":4,"GMP":4,"VBP (Rose)":9,"GLP":2,"Nordlys":3},"2020Q4":{"PICOWAY LASER":4,"GMP":3,"VBP (Rose)":7,"VBP (Grey)":1,"GLP":3,"Profound System":2},"2021Q1":{"PICOWAY LASER":3,"GMP":3,"VBP (Rose)":2,"GLP":3},"2021Q2":{"PICOWAY LASER":5,"GMP":7,"VBP (Rose)":1,"VBP (Grey)":1,"GLP":2,"VB PRIMA":2},"2021Q3":{"PICOWAY LASER":2,"GMP":3,"VBP (Grey)":13,"GLP":2,"Profound System":5,"VB PRIMA":3},"2021Q4":{"PICOWAY LASER":6,"GMP":3,"VBP (Grey)":11,"GLP":3,"VB PRIMA":6},"2022Q1":{"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":9,"GLP":3,"Nordlys":1,"VB PRIMA":1},"2022Q2":{"GMPP":1,"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":10,"GLP":1,"Profound System":5,"Nordlys":1},"2022Q3":{"GMPP":6,"VBP":9,"PICOWAY LASER":4,"GMP":6,"VBP (Grey)":1,"GLP":2,"Nordlys":1},"2022Q4":{"GMPP":16,"VBP":8,"PICOWAY LASER":5,"GMP":5,"Nordlys Mini":1},"2023Q1":{"GMPP":11,"VBP":8,"PICOWAY LASER":3,"GMP":1,"Profound System":5,"Nordlys":1,"Nordlys Mini":2},"2023Q2":{"GMPP":7,"VBP":13,"PICOWAY LASER":4,"GMP":3,"Cryo 7":4,"GLP":3,"Nordlys Mini":2},"2023Q3":{"GMPP":18,"VBP":14,"GMP":4,"Nordlys Mini":2},"2023Q4":{"GMPP":12,"VBP":18,"PICOWAY LASER":2,"GMP":3,"Cryo 7":2,"Profound System":1,"Nordlys Mini":2},"2024Q1":{"GMPP":16,"VBP":11,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"GLP":1,"Nordlys Mini":1},"2024Q2":{"GMPP":33,"VBP":10,"PICOWAY LASER":3,"GMP":2,"Cryo 7":3},"2024Q3":{"GMPP":30,"VBP":9,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"Profound System":4,"Nordlys Mini":2},"2024Q4":{"GMPP":35,"VBP":7,"PICOWAY LASER":2,"GMP":2,"Cryo 7":8,"GLP":1},"2025Q1":{"GMPP":38,"VBP":7,"PICOWAY LASER":3,"GMP":1,"Cryo 7":7,"Profound System":3,"Nordlys":1},"2025Q2":{"GMPP":32,"VBP":7,"PICOWAY LASER":1,"GMP":2,"Cryo 7":11,"Nordlys":1,"Nordlys Mini":4},"2025Q3":{"GMPP":27,"VBP":10,"PICOWAY LASER":2,"GMP":1,"Cryo 7":11,"Nordlys Mini":2},"2025Q4":{"GMPP":32,"VBP":12,"PICOWAY LASER":2,"GMP":1,"Cryo 7":8},"2026Q1":{"GMPP":44,"VBP":7,"PICOWAY LASER":2,"Cryo 7":15}},"totals":{"Cryo 7":71,"GLP":34,"GMP":90,"GMPP":358,"Nordlys":20,"Nordlys Mini":18,"PICOWAY LASER":93,"Profound System":26,"VB PRIMA":12,"VBP":152,"VBP (Grey)":47,"VBP (Rose)":81}};function calcRev(code,total){return(RATE_CODES[code]&&total>0)?total*0.1:total;}
 document.getElementById('file-hidden').onchange=function(e){if(e.target.files[0])loadFile(e.target.files[0]);};(function(){var ub=document.getElementById('up-box');ub.addEventListener('dragover',function(e){e.preventDefault();ub.classList.add('drag');});ub.addEventListener('dragleave',function(){ub.classList.remove('drag');});ub.addEventListener('drop',function(e){e.preventDefault();ub.classList.remove('drag');if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0]);});})();window.addEventListener('DOMContentLoaded',function(){loadFromGoogleSheet();});var GS_SHEET_ID='';var GS_APPS_SCRIPT_URL='/api/sheets';var GS_PUB_URL='';var GS_GVIZ_URL='';var GS_CSV_URL=GS_APPS_SCRIPT_URL;var GS_SYS_SHEET='SYS_DATA';var GS_FSE_SHEET='FSE_DATA';var GS_BRICK_SHEET='PBI2_DATA';function loadFromGoogleSheet(){var gsBtn=document.getElementById('gs-btn');var tbBtn=document.getElementById('tb-gs-btn');var status=document.getElementById('gs-status');function setLoading(msg){if(gsBtn){gsBtn.disabled=true;gsBtn.textContent='로딩 중...';}
 if(tbBtn){tbBtn.disabled=true;tbBtn.textContent='새로고침 중...';}
 if(status){status.textContent=msg;status.className='up-status';}
@@ -770,6 +770,10 @@ function fetchCmAndSys(rows,source){
   function fetchAllPages(sheetName,onComplete){
     var allRows=[];
     var failCount=0;
+    var isFse=sheetName===GS_FSE_SHEET;
+    var isBrick=sheetName===GS_BRICK_SHEET;
+    if(isFse){_fseLoading=true;_fseProgress={cur:0,total:0};}
+    if(isBrick){_brickLoading=true;_brickProgress={cur:0,total:0};}
     function fetchPage(page){
       var url=GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(sheetName)+'&page='+page+'&pageSize=500&t='+Date.now();
       fetch(url,{cache:'no-store'})
@@ -778,15 +782,21 @@ function fetchCmAndSys(rows,source){
           try{
             var j=JSON.parse(t);
             if(j.rows&&j.rows.length)allRows=allRows.concat(j.rows);
-            console.log('['+sheetName+'] page='+page+' 누적='+allRows.length+'/'+j.totalRows);
+            if(isFse){_fseProgress={cur:allRows.length,total:j.totalRows||0};updateFseProgress();}
+            if(isBrick){_brickProgress={cur:allRows.length,total:j.totalRows||0};updateBrickProgress();}
+            console.log('['+sheetName+'] page='+page+' 누적='+allRows.length+'/'+(j.totalRows||'?'));
             if(j.hasMore){
               failCount=0;
               fetchPage(page+1);
             }else{
+              if(isFse)_fseLoading=false;
+              if(isBrick)_brickLoading=false;
               onComplete(allRows);
             }
           }catch(e){
             console.warn('[PARSE ERR]',sheetName,page,e);
+            if(isFse)_fseLoading=false;
+            if(isBrick)_brickLoading=false;
             onComplete(allRows);
           }
         })
@@ -797,7 +807,9 @@ function fetchCmAndSys(rows,source){
             console.log('[RETRY]',sheetName,'page='+page,'시도='+failCount);
             setTimeout(function(){fetchPage(page);},2000);
           }else{
-            console.warn('[포기]',sheetName,'page='+page,'누적='+allRows.length+'행까지만 사용');
+            console.warn('[포기]',sheetName,'page='+page,'누적='+allRows.length+'행');
+            if(isFse)_fseLoading=false;
+            if(isBrick)_brickLoading=false;
             onComplete(allRows);
           }
         });
@@ -957,7 +969,7 @@ function fmtKRW(v){if(v===0)return'—';var abs=Math.abs(v),sign=v<0?'-':'';if(a
 if(abs>=10000)return sign+Math.round(abs/10000).toLocaleString()+'만원';return sign+Math.round(abs).toLocaleString()+'원';}
 function exportFseTable(){if(!FSE_DATA.length){alert('FSE \ub370\uc774\ud130\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.');return;}
 var hdr=['\ub0a0\uc9dc','\ubd84\uae30','\uac70\ub798\uccb8','\uc81c\ud488','Item Type','Revenue Category','Invoice Type','\ub9e4\ucd9c(KRW)','\uc218\ub7c9','\uc624\ub354\ubc88\ud638'];var rows=[hdr].concat(FSE_DATA.map(function(r){return[r.date,r.qtr,r.acc,r.product,r.itemType,r.revCat,r.invoiceType,r.amtLocal,r.qty,r.ordNo];}));var csv=rows.map(function(r){return r.map(function(v){return'"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='fse_wo_data.csv';a.click();}
-function renderFseTab(){var kpiEl=document.getElementById('fse-kpi');var matWrap=document.getElementById('fse-matrix-wrap');var accWrap=document.getElementById('fse-acc-wrap');var catSel=document.getElementById('fse-cat-sel');if(!matWrap)return;var fseData=(FILT_FSE&&FILT_FSE.length)?FILT_FSE:FSE_DATA;if(!fseData.length){matWrap.innerHTML='<div style="padding:30px;text-align:center;font-size:13px;">'
+function renderFseTab(){var kpiEl=document.getElementById('fse-kpi');var matWrap=document.getElementById('fse-matrix-wrap');var accWrap=document.getElementById('fse-acc-wrap');var catSel=document.getElementById('fse-cat-sel');if(!matWrap)return;var fseData=(FILT_FSE&&FILT_FSE.length)?FILT_FSE:FSE_DATA;if(!fseData.length){if(_fseLoading){updateFseProgress();return;}matWrap.innerHTML='<div style="padding:30px;text-align:center;font-size:13px;">'
 +'<div style="color:var(--t2);margin-bottom:16px;">데이터 없음 - 진단 버튼으로 원인 확인</div>'
 +'<button class="btn-sm" onclick="fseDiagnose()" style="font-size:12px;padding:8px 18px;">[FSE 연결 진단]</button>'
 +'</div>';return;}
@@ -973,6 +985,36 @@ var periods={};var revCatSet={};data.forEach(function(r){var p=_fsePeriod==='q'?
 '<td style="'+td+'">'+Math.abs(r.qty).toLocaleString()+'ea</td>'+
 '<td style="padding:5px 8px;font-size:10px;color:var(--t2);border-bottom:1px solid var(--b0);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.cats+'</td>'+
 '</tr>';});accHtml+='</tbody></table>';if(accWrap)accWrap.innerHTML=accHtml;}
+function updateFseProgress(){
+  if(!_fseLoading)return;
+  var wrap=document.getElementById('fse-matrix-wrap');
+  if(!wrap)return;
+  var cur=_fseProgress.cur,total=_fseProgress.total;
+  var pct=total>0?Math.round(cur/total*100):0;
+  wrap.innerHTML='<div style="padding:40px;text-align:center;">'
+    +'<div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:12px;">FSE 데이터 로딩 중...</div>'
+    +'<div style="font-size:12px;color:var(--t2);margin-bottom:16px;">'+cur.toLocaleString()+' / '+total.toLocaleString()+'행 ('+pct+'%)</div>'
+    +'<div style="background:var(--b0);border-radius:8px;height:10px;width:280px;margin:0 auto;overflow:hidden;">'
+    +'<div style="background:var(--acc);height:10px;border-radius:8px;width:'+pct+'%;transition:width .3s;"></div>'
+    +'</div>'
+    +'<div style="font-size:11px;color:var(--t2);margin-top:12px;">잠시만 기다려주세요 (약 1~2분 소요)</div>'
+    +'</div>';
+}
+function updateBrickProgress(){
+  if(!_brickLoading)return;
+  var wrap=document.getElementById('brick-matrix-wrap');
+  if(!wrap)return;
+  var cur=_brickProgress.cur,total=_brickProgress.total;
+  var pct=total>0?Math.round(cur/total*100):0;
+  wrap.innerHTML='<div style="padding:40px;text-align:center;">'
+    +'<div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:12px;">BRICK 데이터 로딩 중...</div>'
+    +'<div style="font-size:12px;color:var(--t2);margin-bottom:16px;">'+cur.toLocaleString()+' / '+total.toLocaleString()+'행 ('+pct+'%)</div>'
+    +'<div style="background:var(--b0);border-radius:8px;height:10px;width:280px;margin:0 auto;overflow:hidden;">'
+    +'<div style="background:var(--acc);height:10px;border-radius:8px;width:'+pct+'%;transition:width .3s;"></div>'
+    +'</div>'
+    +'<div style="font-size:11px;color:var(--t2);margin-top:12px;">잠시만 기다려주세요 (약 1~2분 소요)</div>'
+    +'</div>';
+}
 function fseDiagnose(){var wrap=document.getElementById('fse-matrix-wrap');if(wrap)wrap.innerHTML='<div style="padding:20px;text-align:center;color:var(--t2);">Apps Script 테스트 중...</div>';var url=GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(GS_FSE_SHEET)+'&t='+Date.now();fetch(url,{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){var msg='';if(d.error){msg='<div style="color:var(--red);font-weight:700;margin-bottom:12px;">[X] 오류: '+d.error+'</div>';if(d.available){msg+='<div style="font-weight:600;margin-bottom:8px;">구글 시트 시트 목록:</div>';msg+=d.available.map(function(s){return'<span style="display:inline-block;margin:3px;padding:3px 10px;background:var(--s2);border-radius:5px;font-size:11px;">'+s+'</span>';}).join('');msg+='<div style="margin-top:12px;color:var(--amb);font-size:11px;">위 목록에서 FSE 데이터 시트명을 확인하고 알려주세요</div>';}}else{msg='<div style="color:var(--grn);font-weight:700;margin-bottom:12px;">[OK] 연결 성공! '+d.count+'행 수신</div>';if(d.rows&&d.rows[0]){var keys=Object.keys(d.rows[0]);msg+='<div style="font-size:11px;color:var(--t2);margin-bottom:10px;">콜럼: '+keys.slice(0,6).join(', ')+(keys.length>6?' 등 '+keys.length+'개':'')+'</div>';window._fseDiagRows=d.rows;msg+='<button class="btn-sm" onclick="FSE_DATA=parseFseRows(window._fseDiagRows);renderFseTab();" style="font-size:12px;padding:8px 18px;">바로 로드</button>';}}
 if(wrap)wrap.innerHTML='<div style="padding:24px;line-height:1.8;font-size:12px;">'+msg+'</div>';}).catch(function(e){if(wrap)wrap.innerHTML='<div style="padding:20px;color:var(--red);font-size:12px;">[X] fetch 실패: '+e.message+'</div>';});}
 function parseBrickRows(rows){if(!rows||!rows.length)return[];var sample=rows[0];var allKeys=Object.keys(sample);var localKey='';for(var i=0;i<allKeys.length;i++){if(allKeys[i].replace(/\s+/g,' ').trim()==='Shipped Local'){localKey=allKeys[i];break;}}
@@ -983,7 +1025,7 @@ function brickPeriod(m){_brickPeriod=m;['q','y','m'].forEach(function(x){var b=d
 else{b.style.background='';b.style.color='';b.style.borderColor='var(--b0)';}});renderBrickTab();}
 function exportBrickTable(){if(!BRICK_DATA.length){alert('BRICK \ub370\uc774\ud130\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.');return;}
 var hdr=['BRICK','\ub9e4\ucd9c(KRW)','\ubd84\uae30','\uc5f0\ub3c4','Revenue Category','\uac70\ub798\uccb8'];var rows=[hdr].concat(BRICK_DATA.map(function(r){return[r.brick,r.amtLocal,r.qtr,r.yr,r.revCat,r.acc];}));var csv=rows.map(function(r){return r.map(function(v){return'"'+String(v).replace(/"/g,'""')+'"';}).join(',');}).join('\n');var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);a.download='brick_revenue.csv';a.click();}
-function renderBrickTab(){var matWrap=document.getElementById('brick-matrix-wrap');var revcatWrap=document.getElementById('brick-revcat-wrap');var kpiEl=document.getElementById('brick-kpi');var catSel=document.getElementById('brick-cat-sel');if(!matWrap)return;var brickData=(FILT_BRICK&&FILT_BRICK.length)?FILT_BRICK:BRICK_DATA;if(!brickData.length){matWrap.innerHTML='<div style="padding:30px;text-align:center;font-size:13px;">'
+function renderBrickTab(){var matWrap=document.getElementById('brick-matrix-wrap');var revcatWrap=document.getElementById('brick-revcat-wrap');var kpiEl=document.getElementById('brick-kpi');var catSel=document.getElementById('brick-cat-sel');if(!matWrap)return;var brickData=(FILT_BRICK&&FILT_BRICK.length)?FILT_BRICK:BRICK_DATA;if(!brickData.length){if(_brickLoading){updateBrickProgress();return;}matWrap.innerHTML='<div style="padding:30px;text-align:center;font-size:13px;">'
 +'<div style="color:var(--t2);margin-bottom:16px;">BRICK 데이터 없음 — 진단 버튼으로 원인 확인</div>'
 +'<button class="btn-sm" onclick="brickDiagnose()" style="font-size:12px;padding:8px 18px;">[BRICK 연결 진단]</button>'
 +'</div>';return;}
