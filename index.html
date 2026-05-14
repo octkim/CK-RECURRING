@@ -758,26 +758,41 @@ function fetchCmAndSys(rows,source){
       .catch(function(e){if(!done){done=true;clearTimeout(timer);console.warn('[FETCH ERR]',e);onDone(null);}});
   }
 
-  // 페이지네이션으로 전체 데이터 로드
+  // 페이지네이션으로 전체 데이터 로드 (타임아웃 없음, 재시도 2회)
   function fetchAllPages(sheetName,onComplete){
     var allRows=[];
+    var failCount=0;
     function fetchPage(page){
       var url=GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(sheetName)+'&page='+page+'&pageSize=500&t='+Date.now();
-      safeFetch(url,function(t){
-        if(!t){onComplete(allRows);return;}
-        try{
-          var j=JSON.parse(t);
-          if(j.rows&&j.rows.length)allRows=allRows.concat(j.rows);
-          if(j.hasMore){
-            fetchPage(page+1);
-          }else{
+      fetch(url,{cache:'no-store'})
+        .then(function(r){return r.ok?r.text():Promise.reject('HTTP '+r.status);})
+        .then(function(t){
+          try{
+            var j=JSON.parse(t);
+            if(j.rows&&j.rows.length)allRows=allRows.concat(j.rows);
+            console.log('['+sheetName+'] page='+page+' 누적='+allRows.length+'/'+j.totalRows);
+            if(j.hasMore){
+              failCount=0;
+              fetchPage(page+1);
+            }else{
+              onComplete(allRows);
+            }
+          }catch(e){
+            console.warn('[PARSE ERR]',sheetName,page,e);
             onComplete(allRows);
           }
-        }catch(e){
-          console.warn('[PARSE ERR]',sheetName,e);
-          onComplete(allRows);
-        }
-      });
+        })
+        .catch(function(e){
+          console.warn('[FETCH ERR]',sheetName,'page='+page,e);
+          failCount++;
+          if(failCount<=2){
+            console.log('[RETRY]',sheetName,'page='+page,'시도='+failCount);
+            setTimeout(function(){fetchPage(page);},2000);
+          }else{
+            console.warn('[포기]',sheetName,'page='+page,'누적='+allRows.length+'행까지만 사용');
+            onComplete(allRows);
+          }
+        });
     }
     fetchPage(0);
   }
@@ -954,7 +969,7 @@ function fseDiagnose(){var wrap=document.getElementById('fse-matrix-wrap');if(wr
 if(wrap)wrap.innerHTML='<div style="padding:24px;line-height:1.8;font-size:12px;">'+msg+'</div>';}).catch(function(e){if(wrap)wrap.innerHTML='<div style="padding:20px;color:var(--red);font-size:12px;">[X] fetch 실패: '+e.message+'</div>';});}
 function parseBrickRows(rows){if(!rows||!rows.length)return[];var sample=rows[0];var allKeys=Object.keys(sample);var localKey='';for(var i=0;i<allKeys.length;i++){if(allKeys[i].replace(/\s+/g,' ').trim()==='Shipped Local'){localKey=allKeys[i];break;}}
 function parseAmt(v){if(typeof v==='number')return v;if(!v)return 0;var s=String(v).replace(/[\s₩$,]/g,'');if(s.indexOf('(')>=0)s='-'+s.replace(/[()]/g,'');return parseFloat(s)||0;}
-var result=[];rows.forEach(function(r){var brick=String(r['Service Team From Location']||r['ServiceTeamFromLocation']||'').trim();if(!brick)return;var amt=localKey?parseAmt(r[localKey]):0;var dateStr=String(r['Line GL Date']||r['LineGLDate']||r['Date']||'').trim();var dt=null;if(dateStr&&dateStr!=='########'){dt=new Date(dateStr);if(isNaN(dt.getTime()))dt=null;}
+var result=[];rows.forEach(function(r){var brick=String(r['Service Team From Location']||r['ServiceTeamFromLocation']||'').trim();if(!brick)return;var amt=localKey?parseAmt(r[localKey]):0;var dateStr=String(r['Line GL Date']||r['LineGLDate']||'').trim();if(!dateStr||dateStr==='########'){var _dc=['Date','Invoice Date','Order Date','Invoice Creation Date'];for(var _di=0;_di<_dc.length;_di++){var _dv=String(r[_dc[_di]]||'').trim();if(_dv&&_dv!=='########'){dateStr=_dv;break;}}}var dt=null;if(dateStr&&dateStr!=='########'){dt=new Date(dateStr);if(isNaN(dt.getTime()))dt=null;}
 if(!dt)return;var yr=dt.getFullYear(),mo=dt.getMonth()+1,q=Math.ceil(mo/3);var moKey=yr+'-'+('0'+mo).slice(-2);result.push({brick:brick,revCat:String(r['Revenue Category']||'').trim(),acc:String(r['Bill to Customer Name']||'').trim(),product:String(r['Product Family']||r['Product Line']||'').trim(),itemType:String(r['Item Type']||'').trim(),itemCode:String(r['Item Code']||'').trim(),city:String(r['Site City']||'').trim(),invoiceType:String(r['Invoice Type']||'').trim(),amtLocal:amt,amtUSD:parseAmt(r['Shipped USD']),qty:parseInt(r['Units']||0)||0,yr:String(yr),mo:String(mo),qtr:yr+'Q'+q,moKey:moKey,ts:dt.getTime(),ordNo:String(r['Order Number']||'').trim(),});});console.log('[BRICK] 파싱완료:',result.length,'건');return result;}
 function brickPeriod(m){_brickPeriod=m;['q','y','m'].forEach(function(x){var b=document.getElementById('brick-mode-'+x);if(!b)return;if(x===m){b.style.background='var(--acc)';b.style.color='#fff';b.style.borderColor='var(--acc)';}
 else{b.style.background='';b.style.color='';b.style.borderColor='var(--b0)';}});renderBrickTab();}
