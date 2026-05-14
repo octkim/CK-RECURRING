@@ -743,8 +743,16 @@ function fetchCmAndSys(rows,source){
   var sysRowsResult=[];
 
   function tryStart(){
-    if(cmDone&&sysDone&&fseDone&&brickDone)
+    // CM + SYS 로드되면 먼저 대시보드 표시 (FSE/BRICK은 백그라운드 로드)
+    if(cmDone&&sysDone)
       buildRowsAndStart(rows,source,sysRowsResult);
+  }
+  function tryRefreshFseBrick(){
+    // FSE/BRICK 둘 다 완료되면 탭 갱신
+    if(fseDone&&brickDone){
+      console.log('[FSE+BRICK 로드 완료] FSE:'+FSE_DATA.length+'건 BRICK:'+BRICK_DATA.length+'건');
+      applyFilters();
+    }
   }
 
   function safeFetch(url,onDone){
@@ -813,7 +821,7 @@ function fetchCmAndSys(rows,source){
       try{FSE_DATA=parseFseRows(allRows);FILT_FSE=FSE_DATA.slice();console.log('[FSE] 총',allRows.length,'행 로드');}
       catch(e){console.warn('[FSE]',e);}
     }
-    fseDone=true;tryStart();
+    fseDone=true;tryRefreshFseBrick();
   });
 
   // BRICK_DATA - 페이지네이션
@@ -822,7 +830,7 @@ function fetchCmAndSys(rows,source){
       try{BRICK_DATA=parseBrickRows(allRows);FILT_BRICK=BRICK_DATA.slice();console.log('[BRICK] 총',allRows.length,'행 로드');}
       catch(e){console.warn('[BRICK]',e);}
     }
-    brickDone=true;tryStart();
+    brickDone=true;tryRefreshFseBrick();
   });
 }
 
