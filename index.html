@@ -751,7 +751,7 @@ function fetchCmAndSys(rows,source){
     var done=false;
     var timer=setTimeout(function(){
       if(!done){done=true;console.warn('[TIMEOUT]',url);onDone(null);}
-    },25000);
+    },15000);
     fetch(url,{cache:'no-store'})
       .then(function(r){return r.ok?r.text():Promise.reject(r.status);})
       .then(function(t){if(!done){done=true;clearTimeout(timer);onDone(t);}})
@@ -762,7 +762,7 @@ function fetchCmAndSys(rows,source){
   function fetchAllPages(sheetName,onComplete){
     var allRows=[];
     function fetchPage(page){
-      var url=GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(sheetName)+'&page='+page+'&pageSize=2000&t='+Date.now();
+      var url=GS_APPS_SCRIPT_URL+'?sheet='+encodeURIComponent(sheetName)+'&page='+page+'&pageSize=500&t='+Date.now();
       safeFetch(url,function(t){
         if(!t){onComplete(allRows);return;}
         try{
