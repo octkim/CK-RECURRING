@@ -745,7 +745,7 @@ fseDone=true;tryStart();}).catch(function(e7){console.warn('[FSE] 요청 실패:
 brickDone=true;tryStart();}).catch(function(e9){console.warn('[BRICK] 요청 실패:',e9);brickDone=true;tryStart();});}
 function parseAndStart(txt,source){try{var rows;if(txt.trim().startsWith('{')){var json=JSON.parse(txt);if(json.error)throw new Error('Apps Script 오류: '+json.error);rows=json.rows;if(!rows||!rows.length)throw new Error('데이터가 비어 있습니다 (Apps Script)');if(GS_APPS_SCRIPT_URL&&GS_APPS_SCRIPT_URL.length>3){fetchCmAndSys(rows,source);return;}}else{var wb=XLSX.read(txt,{type:'string',raw:false});var ws=wb.Sheets[wb.SheetNames[0]];rows=XLSX.utils.sheet_to_json(ws,{defval:''});if(!rows.length)throw new Error('데이터가 비어 있습니다 (CSV)');}
 buildRowsAndStart(rows,source);}catch(e){setFail('파싱 오류: '+e.message);}}
-var urls=[{url:GS_APPS_SCRIPT_URL+'?sheet=RAW_DATA',label:'Apps Script 프록시'}].filter(function(u){return u.url&&u.url.length>3;});if(!urls.length){setFail('GS_PUB_URL과 GS_GVIZ_URL이 모두 비어 있습니다. 코드의 GS_SHEET_ID를 확인하세요.');return;}
+var urls=[{url:GS_APPS_SCRIPT_URL+'?sheet=RAW_DATA',label:'구글 시트 연동 중...'}].filter(function(u){return u.url&&u.url.length>3;});if(!urls.length){setFail('GS_PUB_URL과 GS_GVIZ_URL이 모두 비어 있습니다. 코드의 GS_SHEET_ID를 확인하세요.');return;}
 var idx=0;function tryNext(){if(idx>=urls.length){setFail('모든 연결 방법 실패 ('+urls.length+'가지 시도)\n\n'+
 '가장 확실한 해결 방법:\n'+
 '구글 시트 → 파일 → 공유 및 내보내기 → 웹에 게시 →\n'+
