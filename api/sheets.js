@@ -12,11 +12,15 @@ export default async function handler(req, res) {
   const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;
   if (!APPS_SCRIPT_URL) return res.status(500).json({ error: 'Server configuration error' });
 
-  const { sheet } = req.query;
+  const { sheet, page, pageSize } = req.query;
   if (!sheet) return res.status(400).json({ error: 'sheet parameter required' });
 
   try {
-    const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`;
+    // 페이지네이션 파라미터 전달
+    let url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(sheet)}&t=${Date.now()}`;
+    if (page !== undefined) url += `&page=${page}`;
+    if (pageSize !== undefined) url += `&pageSize=${pageSize}`;
+
     const response = await fetch(url, { cache: 'no-store' });
     if (!response.ok) throw new Error(`Upstream error: ${response.status}`);
     const data = await response.json();
