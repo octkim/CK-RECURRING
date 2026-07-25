@@ -822,9 +822,10 @@ function fetchCmAndSys(rows,source){
     if(t){try{var j=JSON.parse(t);if(j.rows&&j.rows.length){CM_MAP={};j.rows.forEach(function(cr){var k=String(cr['Account Name']||'').trim();var v=String(cr['Billing Street']||'').trim();if(k&&v)CM_MAP[k]=v;});}}catch(e){console.warn('[CM]',e);}}
     cmDone=true;tryStart();});
 
-  // SYS_DATA
-  safeFetch(GS_APPS_SCRIPT_URL+'?sheet='+GS_SYS_SHEET+'&t='+Date.now(),function(t){
-    if(t){try{var j=JSON.parse(t);sysRowsResult=j.rows||[];}catch(e){console.warn('[SYS]',e);}}
+  // SYS_DATA - 페이지네이션 (Apps Script는 page 파라미터 없으면 빈 배열 반환하므로 fetchAllPages 사용)
+  fetchAllPages(GS_SYS_SHEET,function(allRows){
+    sysRowsResult=allRows||[];
+    console.log('[SYS] 페이지네이션 로드:',sysRowsResult.length+'행');
     sysDone=true;tryStart();});
 
   // FSE_DATA - 페이지네이션
