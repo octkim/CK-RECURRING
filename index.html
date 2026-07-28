@@ -883,9 +883,13 @@ var idx=0;function tryNext(){if(idx>=urls.length){setFail('모든 연결 방법 
 '구글 시트 → 파일 → 공유 및 내보내기 → 웹에 게시 →\n'+
 '"전체 문서" + "쉼표로 구분된 값(.csv)" 선택 → [게시] 클릭\n'+
 '→ 생성된 URL을 코드 GS_PUB_URL 변수에 붙여넣기');return;}
-var u=urls[idx];idx++;setLoading('연결 시도 '+idx+'/'+urls.length+': '+u.label+'...');fetch(u.url,{cache:'no-store'}).then(function(res){if(!res.ok)throw new Error('HTTP '+res.status);return res.text();}).then(function(txt){if(txt.trim().startsWith('<!')||txt.indexOf('<html')>=0)
+var u=urls[idx];idx++;var retriesLeft=2;
+/* NOTE(502 대응): 5xx는 Apps Script 쪽 일시적 오류(타임아웃/부하)일 때가 많아서
+   바로 포기하지 않고 2초 간격으로 최대 2회 재시도한 뒤에 다음 단계로 넘어갑니다. */
+function attempt(){var label=u.label+(retriesLeft<2?' (재시도 '+(2-retriesLeft)+'/2)':'');setLoading('연결 시도 '+idx+'/'+urls.length+': '+label+'...');fetch(u.url,{cache:'no-store'}).then(function(res){if(!res.ok){var err=new Error('HTTP '+res.status);err.status=res.status;throw err;}return res.text();}).then(function(txt){if(txt.trim().startsWith('<!')||txt.indexOf('<html')>=0)
 throw new Error('HTML 응답 (인증 필요 또는 접근 거부)');if(txt.trim().length<10)
-throw new Error('빈 응답');parseAndStart(txt,u.label);}).catch(function(e){console.warn('[GS '+idx+'차 실패]',u.label,e.message);tryNext();});}
+throw new Error('빈 응답');parseAndStart(txt,u.label);}).catch(function(e){var isTransient=e.status>=500&&e.status<600;if(isTransient&&retriesLeft>0){retriesLeft--;console.warn('[GS 5xx, 재시도 대기]',u.label,e.message,'남은 재시도:',retriesLeft);setTimeout(attempt,2000);}else{console.warn('[GS '+idx+'차 실패]',u.label,e.message);tryNext();}});}
+attempt();}
 tryNext();}
 function loadFile(file){showLoading('데이터 파싱 중...');var reader=new FileReader();reader.onload=function(e){try{var wb=XLSX.read(e.target.result,{type:'array',cellDates:true});CM_MAP={};var cmWs=wb.Sheets['CUSTOMER_MASTER'];if(cmWs){XLSX.utils.sheet_to_json(cmWs,{defval:''}).forEach(function(r){var k=String(r['Account Name']||'').trim();var v=String(r['Billing Street']||'').trim();if(k&&v)CM_MAP[k]=v;});console.log('[CM] 로드:',Object.keys(CM_MAP).length+'개');}
 var rawWs=wb.Sheets['RAW_DATA']||wb.Sheets[wb.SheetNames[0]];RAW=parseRows(XLSX.utils.sheet_to_json(rawWs,{defval:''}));var rawSheet=wb.Sheets['raw']||wb.Sheets['SYS_DATA'];if(rawSheet)SYS_DATA=parseSysRows(XLSX.utils.sheet_to_json(rawSheet,{defval:''}));console.log('[SYS] 로드:',SYS_DATA.length+'건');if(document.getElementById('tb-filename'))document.getElementById('tb-filename').textContent='';startDashboard(false);}catch(err){alert('파일 오류: '+err.message);hideLoading();}};reader.readAsArrayBuffer(file);}
