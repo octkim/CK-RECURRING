@@ -225,6 +225,8 @@ tr:hover td{background:rgba(9,132,227,.04);}
 @media(max-width:900px){.insight-cards{grid-template-columns:1fr 1fr;}}
 @media(max-width:560px){.insight-cards{grid-template-columns:1fr;}}
 .ins-card{background:#f8f9fa;border:1px solid #d6e8fb;border-radius:11px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;box-shadow:0 2px 6px rgba(9,132,227,.06);}
+.ins-card.clk{cursor:pointer;transition:box-shadow .15s,transform .15s;}
+.ins-card.clk:hover{box-shadow:0 4px 14px rgba(9,132,227,.18);transform:translateY(-1px);}
 .ins-card.warn{background:#fffbf5;border-color:#fde8c7;}
 .ins-card.good{background:#f4fdf9;border-color:#c3f0df;}
 .ins-card.alert{background:#fff5f5;border-color:#f9cdcd;}
@@ -1365,9 +1367,23 @@ function showGsErrorGuide(details){var area=document.getElementById('gs-pub-area
 guide.textContent=details;}
 function buildExecInsights(){var el=document.getElementById('exec-insight-cards');if(!el)return;var data=FILT;if(!data.length){el.style.display='none';return;}
 var cards=[];var qs=Qtrs(RAW);if(qs.length>=2){var qPrev=qs[qs.length-2],qCur=qs[qs.length-1];var rPrev=S(RAW.filter(function(r){return r.qtr===qPrev&&r.isRate;}),function(r){return r.rev;});var rCur=S(RAW.filter(function(r){return r.qtr===qCur&&r.isRate;}),function(r){return r.rev;});var gr=rPrev?((rCur-rPrev)/rPrev*100):0;cards.push({cls:gr>=0?'good':'warn',icon:gr>=0?'\uD83D\uDCC8':'\uD83D\uDCC9',label:'\uc804\ubd84\uae30 \ub300\ube44 \uc131\uc7a5\ub960',val:(gr>=0?'+':'')+gr.toFixed(1)+'%',desc:qPrev+' \u2192 '+qCur+' Canister \ub9e4\ucd9c(10% \ud658\uc0b0) \uae30\uc900'});}
-var alertCnt=window._alertCnt||0;cards.push({cls:alertCnt>0?'warn':'good',icon:'\u23F0',label:'\uc7ac\uace0 \uc18c\uc9c4 \uc784\ubc15 \uac70\ub798\ucc98',val:alertCnt+'\uac1c\uc0ac',desc:'Account Portfolio \ud0ed\uc5d0\uc11c \uc0c1\uc138 \ud655\uc778 \uac00\ub2a5'});
+var alertCnt=window._alertCnt||0;cards.push({cls:alertCnt>0?'warn':'good',icon:'\u23F0',label:'\uc7ac\uace0 \uc18c\uc9c4 \uc784\ubc15 \uac70\ub798\ucc98',val:alertCnt+'\uac1c\uc0ac',desc:'\ud074\ub9ad\ud558\uba74 \uc0c1\uc138 \ubaa9\ub85d\uc73c\ub85c \uc774\ub3d9',onclick:'goToAlertAccounts()'});
 var regMap={};data.forEach(function(r){if(r.region)regMap[r.region]=(regMap[r.region]||0)+r.rev;});var regArr=Object.keys(regMap).map(function(k){return[k,regMap[k]];}).sort(function(a,b){return b[1]-a[1];});if(regArr.length){var totalRv=S(data,function(r){return r.rev;});cards.push({cls:'good',icon:'\uD83D\uDCCD',label:'\ub9e4\ucd9c 1\uc704 \uc9c0\uc5ed',val:regArr[0][0],desc:pct(regArr[0][1],totalRv)+' \ube44\uc911 \u00b7 '+fmt(regArr[0][1])});}
-el.innerHTML=cards.map(function(c){return'<div class="ins-card '+c.cls+'"><div class="ins-card-icon">'+c.icon+'</div><div class="ins-card-body"><div class="ins-card-label">'+c.label+'</div><div class="ins-card-val">'+escHtml(String(c.val))+'</div><div class="ins-card-desc">'+c.desc+'</div></div></div>';}).join('');el.style.display='grid';}
+el.innerHTML=cards.map(function(c){var clkCls=c.onclick?' clk':'';var clkAttr=c.onclick?' onclick="'+c.onclick+'"':'';return'<div class="ins-card '+c.cls+clkCls+'"'+clkAttr+'><div class="ins-card-icon">'+c.icon+'</div><div class="ins-card-body"><div class="ins-card-label">'+c.label+'</div><div class="ins-card-val">'+escHtml(String(c.val))+'</div><div class="ins-card-desc">'+c.desc+'</div></div></div>';}).join('');el.style.display='grid';}
+/* NOTE(기능 추가): 위 재고 소진 임박 카드 클릭 시 호출. Account Portfolio 탭으로
+   전환하면서 '재고 임박만 보기' 필터를 자동으로 켠 상태로 진입시킨다. 기존
+   filterAlertOnly()/filterAccGrp()의 버튼 스타일 갱신 로직을 그대로 재사용한다. */
+function goToAlertAccounts(){
+  window._alertOnly=true;
+  _accGrpFilter='all';
+  var tabs=document.querySelectorAll('.tab');
+  switchTab(4,tabs[4]);
+  ['all','A','B','C','D'].forEach(function(g){var b=document.getElementById('grp-btn-'+g);if(b){b.style.background='';b.style.color='';b.style.borderColor='';}});
+  var allBtn=document.getElementById('grp-btn-all');
+  if(allBtn){allBtn.style.background='var(--acc)';allBtn.style.color='#fff';allBtn.style.borderColor='var(--acc)';}
+  var ab=document.getElementById('grp-btn-alert');
+  if(ab){ab.style.background='var(--amb)';ab.style.color='#fff';ab.style.borderColor='var(--amb)';}
+}
 function sortTbl(tableId,col){var table=document.getElementById(tableId);if(!table)return;var tbody=table.querySelector('tbody');if(!tbody)return;var rows=Array.prototype.slice.call(tbody.querySelectorAll('tr'));var key=tableId+'_'+col;var dir=sortSt[key]===1?-1:1;Object.keys(sortSt).forEach(function(k){if(k.indexOf(tableId+'_')===0)delete sortSt[k];});sortSt[key]=dir;rows.sort(function(a,b){var ta=a.children[col]?a.children[col].textContent.trim():'';var tb=b.children[col]?b.children[col].textContent.trim():'';var na=parseFloat(ta.replace(/[^0-9.\-]/g,''));var nb=parseFloat(tb.replace(/[^0-9.\-]/g,''));if(!isNaN(na)&&!isNaN(nb)&&/[0-9]/.test(ta)&&/[0-9]/.test(tb))return(na-nb)*dir;return ta.localeCompare(tb,'ko')*dir;});rows.forEach(function(r){tbody.appendChild(r);});var ths=table.querySelectorAll('th');ths.forEach(function(th,i){th.classList.toggle('sorted',i===col);var si=th.querySelector('.si');if(si)si.textContent=i===col?(dir===1?'\u2191':'\u2193'):'\u2195';});}
 function dl(content,mime,filename){var blob=new Blob([content],{type:mime+';charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url);},1000);}
 /* NOTE(기능 추가: xlsx 내보내기): SheetJS Community(무료)판은 셀 배경색·굵게 같은
