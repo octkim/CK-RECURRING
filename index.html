@@ -1916,13 +1916,13 @@ function renderExecHeadline(){
     return'<div style="font-size:10px;color:var(--amb);margin-top:4px;font-weight:600;">\u26a0 이 항목 데이터는 '+escHtml(lastK)+'까지만 있습니다</div>';
   }
   var cards=[
-    {cls:'s1',label:'소모품 매출',sub:cur+' · Canister 10% 환산 포함',val:fmt(c.consum),
+    {key:'consum',cls:'s1',label:'소모품 매출',sub:cur+' · Canister 10% 환산 포함',val:fmt(c.consum),
      delta:deltaHtml(c.consum,p&&p.consum),foot:'Canister · Tip · 일반 소모품 합계',stale:staleNote('consum')},
-    {cls:'s2',label:'서비스 매출 (BRICK)',sub:cur+' · Service Team 기준',val:fmtKRW(c.brick),
+    {key:'brick',cls:'s2',label:'서비스 매출 (BRICK)',sub:cur+' · Service Team 기준',val:fmtKRW(c.brick),
      delta:deltaHtml(c.brick,p&&p.brick),foot:'PBI2_DATA · Shipped Local',stale:staleNote('brick')},
-    {cls:'s3',label:'서비스 매출 (FSE WO)',sub:cur+' · Work Order 기준',val:fmtKRW(c.fse),
+    {key:'fse',cls:'s3',label:'서비스 매출 (FSE WO)',sub:cur+' · Work Order 기준',val:fmtKRW(c.fse),
      delta:deltaHtml(c.fse,p&&p.fse),foot:'FSE_DATA · Credit Memo 반영 순매출',stale:staleNote('fse')},
-    {cls:'s4',label:'장비 판매',sub:cur+' · 소모품 매출의 동력',val:fmtN(c.units)+'대',
+    {key:'units',cls:'s4',label:'장비 판매',sub:cur+' · 소모품 매출의 동력',val:fmtN(c.units)+'대',
      delta:deltaHtml(c.units,p&&p.units),
      foot:'System 판매현황 탭과 같은 출처(수동 확인 데이터) — 설치기반이 늘면 소모품이 따라온다',
      stale:(function(){
@@ -1937,7 +1937,8 @@ function renderExecHeadline(){
       +'<div class="hl-sublabel">'+escHtml(k.sub)+'</div>'
       +'<div class="hl-value">'+k.val+'</div>'
       +'<div>'+k.delta+'<span style="font-size:10.5px;color:var(--t2);margin-left:6px;">전'+unitLbl+' 대비</span></div>'
-      +'<div class="hl-foot">'+k.foot+'</div>'+k.stale
+      +'<div class="hl-foot">'+k.foot+'</div>'
+      +'<div id="hl-stale-'+k.key+'">'+k.stale+'</div>'
       +'</div>';
   }).join('');
 
@@ -1954,14 +1955,33 @@ function renderExecHeadline(){
   }
   renderExecActions();
   renderExecTrendChart(agg);
-  /* 로딩이 진행되는 동안 헤드라인 숫자와 진행률이 갱신되도록 짧게 재호출 */
+  /* NOTE(깜빡임 수정): 로딩 중 진행률을 보여주려고 이 함수를 2.5초마다 다시 부르게 했더니,
+     안에서 mkC()가 차트를 파괴하고 새로 만드는 탓에 차트가 주기적으로 사라졌다 나타났습니다.
+     이제 폴링은 로딩 안내 문구만 부분 갱신하고, 차트/숫자 전체 재렌더는
+     로딩이 끝난 시점에 딱 한 번만 합니다. */
   if((_brickLoading||_fseLoading)&&!window._hlPoll){
     window._hlPoll=setInterval(function(){
-      if(!_brickLoading&&!_fseLoading){clearInterval(window._hlPoll);window._hlPoll=null;}
       var t=document.querySelector('.tab.active');
-      if(t&&t.getAttribute('data-idx')==='0')renderExecHeadline();
+      var onExec=t&&t.getAttribute('data-idx')==='0';
+      if(!_brickLoading&&!_fseLoading){
+        clearInterval(window._hlPoll);window._hlPoll=null;
+        if(onExec)renderExecHeadline();      // 완료 시 한 번만 전체 갱신
+        return;
+      }
+      if(onExec)updateHeadlineLoadingNotes(); // 진행 중에는 안내 문구만
     },2500);
   }
+}
+/* 로딩 진행률 문구만 교체 — 차트는 건드리지 않으므로 깜빡이지 않는다 */
+function updateHeadlineLoadingNotes(){
+  [['brick',_brickLoading,_brickProgress],['fse',_fseLoading,_fseProgress]].forEach(function(x){
+    var el=document.getElementById('hl-stale-'+x[0]);
+    if(!el)return;
+    if(!x[1]){el.innerHTML='';return;}
+    var pr=x[2]||{};
+    el.innerHTML='<div style="font-size:10px;color:var(--acc);margin-top:4px;font-weight:600;">\u23F3 아직 불러오는 중'
+      +(pr.total?' ('+(pr.cur||0).toLocaleString()+'/'+pr.total.toLocaleString()+'행)':'')+'</div>';
+  });
 }
 function renderExecActions(){
   var el=document.getElementById('exec-actions');
