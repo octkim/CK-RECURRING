@@ -218,8 +218,11 @@ tr:hover td{background:rgba(9,132,227,.04);}
 .hl-delta.up{background:rgba(0,184,148,.12);color:#00997c;}
 .hl-delta.dn{background:rgba(214,48,49,.1);color:#c0392b;}
 .hl-delta.flat{background:rgba(99,110,114,.1);color:var(--t1);}
-.hl-ctx{font-size:11.5px;color:var(--tx);margin-top:8px;line-height:1.5;padding:6px 9px;background:var(--s2);border-radius:7px;}
-.hl-foot{font-size:10px;color:var(--t2);margin-top:7px;line-height:1.5;}
+.hl-cmp{font-size:11.5px;color:var(--tx);margin-top:9px;line-height:1.6;}
+.hl-ctx{font-size:11.5px;color:var(--tx);margin-top:8px;line-height:1.55;padding:7px 10px;background:var(--s2);border-radius:7px;}
+.hl-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--b1);color:var(--t1);font-size:9px;font-weight:800;margin-left:5px;cursor:help;vertical-align:1px;}
+.hl-info:hover{background:var(--acc);color:#fff;}
+.hl-label{display:flex;align-items:center;}
 .act-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
 @media(max-width:800px){.act-grid{grid-template-columns:1fr;}}
 .act-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--b0);border-left:4px solid var(--b1);border-radius:11px;padding:12px 15px;cursor:pointer;transition:box-shadow .15s,transform .15s;}
@@ -834,7 +837,7 @@ tr:hover td{background:rgba(9,132,227,.04);}
 </div>
 
 <script>
-let RAW=[];var RATE_CODES={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1};var MAIN={FIN101110:1,'1600-00-0219':1};var PROMO={FIN101098:1,'1600-00-0218':1};var CAN={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1,'1600-00-0210':1};var TIP_KW=['SubQ','SubRF','Sublative','Profound','eMatrix','eTwo','elos Plus','elos X'];var TIP_SYS_KW=[{key:'Profound',label:'Profound'},{key:'SubQ',label:'SubQ'},{key:'SubRF',label:'SubRF'},{key:'Sublative',label:'Sublative'},{key:'eMatrix',label:'eMatrix'},{key:'eTwo',label:'eTwo'},{key:'elos',label:'elos Plus/X'},];var FILT=[],charts={},sortSt={},_modalRows=[],_accDetChart=null,_gmap={};var CM_MAP={};var SYS_DATA=[];var FSE_DATA=[];var FILT_FSE=[];var _fsePeriod='q';var BRICK_DATA=[];var FILT_BRICK=[];var FILT_SYS=[];var _brickPeriod='q';var _fseLoading=false;var _fseProgress={cur:0,total:0};var _brickLoading=false;var _brickProgress={cur:0,total:0};var GMPP_DCD_DATA={"qtrs":["2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1"],"gmpp":{"2022Q2":1,"2022Q3":5,"2022Q4":14,"2023Q1":10,"2023Q2":6,"2023Q3":16,"2023Q4":11,"2024Q1":14,"2024Q2":29,"2024Q3":27,"2024Q4":31,"2025Q1":36,"2025Q2":37,"2025Q3":34,"2025Q4":35,"2026Q1":52},"dcd":{"2022Q2":2,"2022Q3":12,"2022Q4":40,"2023Q1":27,"2023Q2":13,"2023Q3":39,"2023Q4":28,"2024Q1":31,"2024Q2":77,"2024Q3":64,"2024Q4":66,"2025Q1":81,"2025Q2":97,"2025Q3":92,"2025Q4":82,"2026Q1":122}};var _sysMode='q',_sysView='all';var SYS_STATIC_DATA={"qtrs":["2018Q4","2019Q1","2019Q2","2019Q3","2019Q4","2020Q1","2020Q2","2020Q3","2020Q4","2021Q1","2021Q2","2021Q3","2021Q4","2022Q1","2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1","2026Q2"],"brands":["GMPP","VBP","PICOWAY LASER","GMP","VBP (Rose)","Cryo 7","VBP (Grey)","GLP","Profound System","Nordlys","Nordlys Mini","VB PRIMA"],"matrix":{"2018Q4":{"PICOWAY LASER":3,"GMP":7,"VBP (Rose)":9,"VBP (Grey)":1},"2019Q1":{"PICOWAY LASER":2,"GMP":3,"VBP (Rose)":13},"2019Q2":{"VBP":1,"PICOWAY LASER":4,"GMP":2,"VBP (Rose)":9,"GLP":2},"2019Q3":{"PICOWAY LASER":4,"GMP":5,"VBP (Rose)":12,"GLP":2,"Nordlys":3},"2019Q4":{"VBP":1,"PICOWAY LASER":3,"GMP":4,"VBP (Rose)":13,"GLP":0,"Profound System":1,"Nordlys":6},"2020Q1":{"PICOWAY LASER":2,"GMP":2,"VBP (Rose)":3,"GLP":1,"Nordlys":2},"2020Q2":{"PICOWAY LASER":2,"GMP":1,"VBP (Rose)":3,"GLP":3},"2020Q3":{"PICOWAY LASER":4,"GMP":4,"VBP (Rose)":9,"GLP":2,"Nordlys":3},"2020Q4":{"PICOWAY LASER":4,"GMP":3,"VBP (Rose)":7,"VBP (Grey)":1,"GLP":3,"Profound System":2},"2021Q1":{"PICOWAY LASER":3,"GMP":3,"VBP (Rose)":2,"GLP":3},"2021Q2":{"PICOWAY LASER":5,"GMP":7,"VBP (Rose)":1,"VBP (Grey)":1,"GLP":2,"VB PRIMA":2},"2021Q3":{"PICOWAY LASER":2,"GMP":3,"VBP (Grey)":13,"GLP":2,"Profound System":5,"VB PRIMA":3},"2021Q4":{"PICOWAY LASER":6,"GMP":3,"VBP (Grey)":11,"GLP":3,"VB PRIMA":6},"2022Q1":{"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":9,"GLP":3,"Nordlys":1,"VB PRIMA":1},"2022Q2":{"GMPP":1,"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":10,"GLP":1,"Profound System":5,"Nordlys":1},"2022Q3":{"GMPP":6,"VBP":9,"PICOWAY LASER":4,"GMP":6,"VBP (Grey)":1,"GLP":2,"Nordlys":1},"2022Q4":{"GMPP":16,"VBP":8,"PICOWAY LASER":5,"GMP":5,"Nordlys Mini":1},"2023Q1":{"GMPP":11,"VBP":8,"PICOWAY LASER":3,"GMP":1,"Profound System":5,"Nordlys":1,"Nordlys Mini":2},"2023Q2":{"GMPP":7,"VBP":13,"PICOWAY LASER":4,"GMP":3,"Cryo 7":4,"GLP":3,"Nordlys Mini":2},"2023Q3":{"GMPP":18,"VBP":14,"GMP":4,"Nordlys Mini":2},"2023Q4":{"GMPP":12,"VBP":18,"PICOWAY LASER":2,"GMP":3,"Cryo 7":2,"Profound System":1,"Nordlys Mini":2},"2024Q1":{"GMPP":16,"VBP":11,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"GLP":1,"Nordlys Mini":1},"2024Q2":{"GMPP":33,"VBP":10,"PICOWAY LASER":3,"GMP":2,"Cryo 7":3},"2024Q3":{"GMPP":30,"VBP":9,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"Profound System":4,"Nordlys Mini":2},"2024Q4":{"GMPP":35,"VBP":7,"PICOWAY LASER":2,"GMP":2,"Cryo 7":8,"GLP":1},"2025Q1":{"GMPP":38,"VBP":7,"PICOWAY LASER":3,"GMP":1,"Cryo 7":7,"Profound System":3,"Nordlys":1},"2025Q2":{"GMPP":32,"VBP":7,"PICOWAY LASER":1,"GMP":2,"Cryo 7":11,"Nordlys":1,"Nordlys Mini":4},"2025Q3":{"GMPP":27,"VBP":10,"PICOWAY LASER":2,"GMP":1,"Cryo 7":11,"Nordlys Mini":2},"2025Q4":{"GMPP":32,"VBP":12,"PICOWAY LASER":2,"GMP":1,"Cryo 7":8},"2026Q1":{"GMPP":44,"VBP":7,"PICOWAY LASER":2,"Cryo 7":15},"2026Q2":{"GMPP":57,"VBP":4,"PICOWAY LASER":3,"Cryo 7":17}},"totals":{"Cryo 7":88,"GLP":34,"GMP":90,"GMPP":415,"Nordlys":20,"Nordlys Mini":18,"PICOWAY LASER":96,"Profound System":26,"VB PRIMA":12,"VBP":156,"VBP (Grey)":47,"VBP (Rose)":81}};function calcRev(code,total){return(RATE_CODES[code]&&total>0)?total*0.1:total;}
+let RAW=[];var RATE_CODES={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1};var MAIN={FIN101110:1,'1600-00-0219':1};var PROMO={FIN101098:1,'1600-00-0218':1};var CAN={FIN101110:1,'1600-00-0219':1,FIN101098:1,'1600-00-0218':1,'1600-00-0210':1};var TIP_KW=['SubQ','SubRF','Sublative','Profound','eMatrix','eTwo','elos Plus','elos X'];var TIP_SYS_KW=[{key:'Profound',label:'Profound'},{key:'SubQ',label:'SubQ'},{key:'SubRF',label:'SubRF'},{key:'Sublative',label:'Sublative'},{key:'eMatrix',label:'eMatrix'},{key:'eTwo',label:'eTwo'},{key:'elos',label:'elos Plus/X'},];var FILT=[],charts={},sortSt={},_modalRows=[],_accDetChart=null,_gmap={};var CM_MAP={};var SYS_DATA=[];var FSE_DATA=[];var FILT_FSE=[];var _fsePeriod='q';var BRICK_DATA=[];var FILT_BRICK=[];var _brickPeriod='q';var _fseLoading=false;var _fseProgress={cur:0,total:0};var _brickLoading=false;var _brickProgress={cur:0,total:0};var GMPP_DCD_DATA={"qtrs":["2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1"],"gmpp":{"2022Q2":1,"2022Q3":5,"2022Q4":14,"2023Q1":10,"2023Q2":6,"2023Q3":16,"2023Q4":11,"2024Q1":14,"2024Q2":29,"2024Q3":27,"2024Q4":31,"2025Q1":36,"2025Q2":37,"2025Q3":34,"2025Q4":35,"2026Q1":52},"dcd":{"2022Q2":2,"2022Q3":12,"2022Q4":40,"2023Q1":27,"2023Q2":13,"2023Q3":39,"2023Q4":28,"2024Q1":31,"2024Q2":77,"2024Q3":64,"2024Q4":66,"2025Q1":81,"2025Q2":97,"2025Q3":92,"2025Q4":82,"2026Q1":122}};var _sysMode='q',_sysView='all';var SYS_STATIC_DATA={"qtrs":["2018Q4","2019Q1","2019Q2","2019Q3","2019Q4","2020Q1","2020Q2","2020Q3","2020Q4","2021Q1","2021Q2","2021Q3","2021Q4","2022Q1","2022Q2","2022Q3","2022Q4","2023Q1","2023Q2","2023Q3","2023Q4","2024Q1","2024Q2","2024Q3","2024Q4","2025Q1","2025Q2","2025Q3","2025Q4","2026Q1","2026Q2"],"brands":["GMPP","VBP","PICOWAY LASER","GMP","VBP (Rose)","Cryo 7","VBP (Grey)","GLP","Profound System","Nordlys","Nordlys Mini","VB PRIMA"],"matrix":{"2018Q4":{"PICOWAY LASER":3,"GMP":7,"VBP (Rose)":9,"VBP (Grey)":1},"2019Q1":{"PICOWAY LASER":2,"GMP":3,"VBP (Rose)":13},"2019Q2":{"VBP":1,"PICOWAY LASER":4,"GMP":2,"VBP (Rose)":9,"GLP":2},"2019Q3":{"PICOWAY LASER":4,"GMP":5,"VBP (Rose)":12,"GLP":2,"Nordlys":3},"2019Q4":{"VBP":1,"PICOWAY LASER":3,"GMP":4,"VBP (Rose)":13,"GLP":0,"Profound System":1,"Nordlys":6},"2020Q1":{"PICOWAY LASER":2,"GMP":2,"VBP (Rose)":3,"GLP":1,"Nordlys":2},"2020Q2":{"PICOWAY LASER":2,"GMP":1,"VBP (Rose)":3,"GLP":3},"2020Q3":{"PICOWAY LASER":4,"GMP":4,"VBP (Rose)":9,"GLP":2,"Nordlys":3},"2020Q4":{"PICOWAY LASER":4,"GMP":3,"VBP (Rose)":7,"VBP (Grey)":1,"GLP":3,"Profound System":2},"2021Q1":{"PICOWAY LASER":3,"GMP":3,"VBP (Rose)":2,"GLP":3},"2021Q2":{"PICOWAY LASER":5,"GMP":7,"VBP (Rose)":1,"VBP (Grey)":1,"GLP":2,"VB PRIMA":2},"2021Q3":{"PICOWAY LASER":2,"GMP":3,"VBP (Grey)":13,"GLP":2,"Profound System":5,"VB PRIMA":3},"2021Q4":{"PICOWAY LASER":6,"GMP":3,"VBP (Grey)":11,"GLP":3,"VB PRIMA":6},"2022Q1":{"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":9,"GLP":3,"Nordlys":1,"VB PRIMA":1},"2022Q2":{"GMPP":1,"PICOWAY LASER":6,"GMP":5,"VBP (Grey)":10,"GLP":1,"Profound System":5,"Nordlys":1},"2022Q3":{"GMPP":6,"VBP":9,"PICOWAY LASER":4,"GMP":6,"VBP (Grey)":1,"GLP":2,"Nordlys":1},"2022Q4":{"GMPP":16,"VBP":8,"PICOWAY LASER":5,"GMP":5,"Nordlys Mini":1},"2023Q1":{"GMPP":11,"VBP":8,"PICOWAY LASER":3,"GMP":1,"Profound System":5,"Nordlys":1,"Nordlys Mini":2},"2023Q2":{"GMPP":7,"VBP":13,"PICOWAY LASER":4,"GMP":3,"Cryo 7":4,"GLP":3,"Nordlys Mini":2},"2023Q3":{"GMPP":18,"VBP":14,"GMP":4,"Nordlys Mini":2},"2023Q4":{"GMPP":12,"VBP":18,"PICOWAY LASER":2,"GMP":3,"Cryo 7":2,"Profound System":1,"Nordlys Mini":2},"2024Q1":{"GMPP":16,"VBP":11,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"GLP":1,"Nordlys Mini":1},"2024Q2":{"GMPP":33,"VBP":10,"PICOWAY LASER":3,"GMP":2,"Cryo 7":3},"2024Q3":{"GMPP":30,"VBP":9,"PICOWAY LASER":2,"GMP":1,"Cryo 7":1,"Profound System":4,"Nordlys Mini":2},"2024Q4":{"GMPP":35,"VBP":7,"PICOWAY LASER":2,"GMP":2,"Cryo 7":8,"GLP":1},"2025Q1":{"GMPP":38,"VBP":7,"PICOWAY LASER":3,"GMP":1,"Cryo 7":7,"Profound System":3,"Nordlys":1},"2025Q2":{"GMPP":32,"VBP":7,"PICOWAY LASER":1,"GMP":2,"Cryo 7":11,"Nordlys":1,"Nordlys Mini":4},"2025Q3":{"GMPP":27,"VBP":10,"PICOWAY LASER":2,"GMP":1,"Cryo 7":11,"Nordlys Mini":2},"2025Q4":{"GMPP":32,"VBP":12,"PICOWAY LASER":2,"GMP":1,"Cryo 7":8},"2026Q1":{"GMPP":44,"VBP":7,"PICOWAY LASER":2,"Cryo 7":15},"2026Q2":{"GMPP":57,"VBP":4,"PICOWAY LASER":3,"Cryo 7":17}},"totals":{"Cryo 7":88,"GLP":34,"GMP":90,"GMPP":415,"Nordlys":20,"Nordlys Mini":18,"PICOWAY LASER":96,"Profound System":26,"VB PRIMA":12,"VBP":156,"VBP (Grey)":47,"VBP (Rose)":81}};function calcRev(code,total){return(RATE_CODES[code]&&total>0)?total*0.1:total;}
 document.getElementById('file-hidden').onchange=function(e){if(e.target.files[0])loadFile(e.target.files[0]);};(function(){var ub=document.getElementById('up-box');ub.addEventListener('dragover',function(e){e.preventDefault();ub.classList.add('drag');});ub.addEventListener('dragleave',function(){ub.classList.remove('drag');});ub.addEventListener('drop',function(e){e.preventDefault();ub.classList.remove('drag');if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0]);});})();
 /* NOTE(fix#1+#4): 자동 로딩은 이제 window._startDataLoad()를 통해서만 실행됩니다.
    이 래퍼는 (a) 비밀번호가 확인되기 전에는 데이터를 가져오지 않고,
@@ -1076,8 +1079,10 @@ document.getElementById('upload-screen').style.display='none';document.getElemen
 buildFilters();document.getElementById('f-year').value='';document.getElementById('f-quarter').value='';document.getElementById('f-month').value='';applyFilters();hideLoading();}
 function buildFilters(){var yrs=uniq(RAW.map(function(r){return r.yr;}).filter(Boolean)).sort();var qtrs=uniq(RAW.map(function(r){return r.qtr;}).filter(Boolean)).sort();var mos=uniq(RAW.map(function(r){return r.mo;}).filter(Boolean)).sort(function(a,b){return+a-+b;});fillSel('f-year',yrs);fillSel('f-quarter',qtrs);fillSel('f-month',mos);}
 function fillSel(id,opts){var sel=document.getElementById(id);sel.innerHTML='<option value="">전체</option>'+opts.map(function(o){return'<option value="'+o+'">'+o+'</option>';}).join('');}
-/* NOTE(수정): 기간 필터가 4개 데이터 소스에 각각 복붙되어 있었고, SYS_DATA만
-   필터 체계 밖에 있었습니다(FILT_SYS 부재). 공용 함수로 합치고 SYS도 포함시켰습니다. */
+/* NOTE(정리): 기간 필터 로직이 데이터 소스마다 복붙되어 있어서 공용 함수로 합쳤습니다.
+   SYS_DATA용 FILT_SYS도 한때 만들었지만, 장비 대수를 SYS_STATIC_DATA(수동 확인 데이터)로
+   집계하도록 확정되면서 소비처가 없어져 제거했습니다. 나중에 System 탭이 상단 기간 필터를
+   따라야 한다면 이 함수로 FILT_SYS를 다시 만들면 됩니다. */
 function periodFilter(rows,yr,qtr,mo){
   return (rows||[]).filter(function(r){
     if(yr&&String(r.yr)!==String(yr))return false;
@@ -1093,7 +1098,6 @@ function applyFilters(){
   FILT=periodFilter(RAW,yr,qtr,mo);
   FILT_FSE=periodFilter(FSE_DATA,yr,qtr,mo);
   FILT_BRICK=periodFilter(BRICK_DATA,yr,qtr,mo);
-  FILT_SYS=periodFilter(SYS_DATA,yr,qtr,mo);
   _gmap=classifyGroups(FILT);window._accListCache=null;computeAccountAlerts();renderAll();
 }
 function classifyGroups(data){var m={};data.forEach(function(r){if(!m[r.acc])m[r.acc]={hm:false,hp:false};if(r.isMain)m[r.acc].hm=true;if(r.isPromo)m[r.acc].hp=true;});var g={};Object.keys(m).forEach(function(a){var v=m[a];g[a]=v.hm&&v.hp?'A':v.hm?'B':v.hp?'C':'D';});return g;}
@@ -1819,7 +1823,7 @@ function redrawActiveTab(){
 function execAggregate(mode){
   function pk(q){return mode==='y'?String(q).slice(0,4):q;}
   var out={};
-  function slot(k){if(!out[k])out[k]={consum:0,brick:0,fse:0,units:0,unitsLive:0};return out[k];}
+  function slot(k){if(!out[k])out[k]={consum:0,brick:0,fse:0,units:0};return out[k];}
   /* NOTE(회귀 수정): 여기서 (FILT_X.length ? FILT_X : X_DATA) 패턴을 쓰고 있었습니다.
      그건 renderBrickTab/renderFseTab에서 이미 제거한 버그와 같은 것이고, 그대로 두면
      "연도=2024 선택 → 소모품은 0인데 서비스는 2026년 전체 숫자" 처럼 같은 줄의 카드가
@@ -1827,15 +1831,13 @@ function execAggregate(mode){
   var cSel=pickFilteredData(FILT,RAW);
   var bSel=pickFilteredData(FILT_BRICK,BRICK_DATA);
   var fSel=pickFilteredData(FILT_FSE,FSE_DATA);
-  var sSel=pickFilteredData(FILT_SYS,SYS_DATA);
   cSel.rows.forEach(function(r){if(r.qtr)slot(pk(r.qtr)).consum+=r.rev;});
   bSel.rows.forEach(function(r){if(r.qtr)slot(pk(r.qtr)).brick+=r.amtLocal;});
   fSel.rows.forEach(function(r){if(r.qtr)slot(pk(r.qtr)).fse+=r.amtLocal;});
-  /* NOTE(내 실수 수정): 장비 대수를 실시간 SYS_DATA로 세고 있었는데, System 판매현황 탭은
-     하드코딩된 SYS_STATIC_DATA(코드 주석상 "수동 확인된 정확한 값")를 씁니다. 그래서 같은
-     2026Q2 장비 판매를 헤드라인은 17대, 탭은 81대로 표시하는 모순이 생겼습니다.
-     탭이 이 지표의 전용 화면이므로 그쪽 출처에 맞추고, 실시간 시트 값은 따로 세어
-     차이가 크면 진단에서 확인할 수 있게 남깁니다. */
+  /* NOTE(장비 대수의 출처): SYS_STATIC_DATA(하드코딩, 수동 확인 데이터)를 씁니다.
+     구글시트 SYS_DATA에서 세면 값이 훨씬 적게 나오지만, 사용자 확인 결과 수동 확인
+     데이터가 정확한 것으로 확정되었으므로 그쪽만 사용합니다. System 판매현황 탭도
+     같은 출처라 두 화면의 숫자가 항상 일치합니다. */
   var yrF=(document.getElementById('f-year')||{}).value||'';
   var qtrF=(document.getElementById('f-quarter')||{}).value||'';
   if(typeof SYS_STATIC_DATA!=='undefined'&&SYS_STATIC_DATA.matrix){
@@ -1847,8 +1849,6 @@ function execAggregate(mode){
       if(sum)slot(pk(q)).units+=sum;
     });
   }
-  /* 실시간 시트 기준 대수(비교용) */
-  sSel.rows.forEach(function(r){if(r.qtr)slot(pk(r.qtr)).unitsLive=(slot(pk(r.qtr)).unitsLive||0)+r.qty;});
   var keys=Object.keys(out).sort();
   /* NOTE(버그 수정): 기준 기간을 "모든 소스의 마지막 기간"으로 잡으면 안 됩니다.
      장비(SYS_DATA)는 매출 데이터보다 훨씬 과거(2018년~)로도, 때로는 미래(예약 건)로도
@@ -1859,7 +1859,7 @@ function execAggregate(mode){
   var revKeys=keys.filter(function(k){var v=out[k];return(v.consum+v.brick+v.fse)>0;});
   function lastWith(fn){for(var i=keys.length-1;i>=0;i--){if(fn(out[keys[i]]))return keys[i];}return'';}
   /* 필터 때문에 특정 갈래가 통째로 비었는지 — 헤드라인에서 "0원"과 구분해 표시하기 위함 */
-  var emptyByFilter={consum:cSel.emptyByFilter,brick:bSel.emptyByFilter,fse:fSel.emptyByFilter,units:sSel.emptyByFilter};
+  var emptyByFilter={consum:cSel.emptyByFilter,brick:bSel.emptyByFilter,fse:fSel.emptyByFilter,units:false};
   return{
     keys:keys,rows:out,revKeys:revKeys,emptyByFilter:emptyByFilter,
     last:{consum:lastWith(function(v){return v.consum>0;}),
@@ -1935,6 +1935,77 @@ function trendContext(keys,rows,field,curKey,mode){
   }
   return parts.join(' · ');
 }
+/* NOTE(가독성): 카드가 '2026Q2', '역대 최고 (31개 분기 중 1위) · 평균의 2.3배' 처럼
+   기호와 축약으로 쓰여 있어서 한눈에 읽히지 않았습니다. 아래 두 함수가 기간과 맥락을
+   평범한 한국어로 바꿔 줍니다. */
+function fmtPeriodKo(key,mode){
+  key=String(key||'');
+  if(mode==='y')return key+'년';
+  var m=key.match(/^(\d{4})Q([1-4])$/);
+  if(!m)return key;
+  var mons={'1':'1~3월','2':'4~6월','3':'7~9월','4':'10~12월'};
+  return m[1]+'년 '+m[2]+'분기 ('+mons[m[2]]+')';
+}
+/* 맥락을 문장으로: "4분기 연속 늘고 있고, 2018년 이후 가장 많습니다 (평균의 2.3배)" */
+function trendSentence(keys,rows,field,curKey,mode){
+  var seq=keys.filter(function(k){return rows[k]&&rows[k][field]>0;});
+  var ci=seq.indexOf(curKey);
+  if(ci<0)return'';
+  var vals=seq.map(function(k){return rows[k][field];});
+  var cur=vals[ci];
+  var unitWord=mode==='y'?'년':'분기';
+  var since=String(seq[0]).slice(0,4);
+  var bits=[];
+  /* 연속 증감 */
+  var dir=0,len=0;
+  for(var i=ci;i>0;i--){
+    var d=vals[i]>vals[i-1]?1:(vals[i]<vals[i-1]?-1:0);
+    if(d===0)break;
+    if(dir===0)dir=d;
+    if(d!==dir)break;
+    len++;
+  }
+  if(len>=2)bits.push('<b>'+(len+1)+unitWord+' 연속 '+(dir>0?'늘고':'줄고')+' 있고</b>');
+  /* 순위 — 진행 중인 기간이면 단정하지 않는다 */
+  var sorted=vals.slice().sort(function(a,b){return b-a;});
+  var rank=sorted.indexOf(cur)+1;
+  var inProg=periodIsInProgress(curKey,mode);
+  var rankTxt='';
+  /* NOTE(수정): 예전엔 기간 4개만 있어도 "가장 많습니다"라고 단정했습니다. 4개 표본으로
+     역대 최고를 말하는 건 근거가 약합니다. 최상/최하 단정은 6개 이상일 때만 하고,
+     그보다 적으면 순위만 밝히거나 표본이 적다는 사실을 그대로 알립니다. */
+  if(vals.length>=6){
+    if(inProg){
+      rankTxt='<span style="color:var(--amb);">아직 진행 중인 '+unitWord+'</span>입니다 (현재까지 기준 '+rank+'번째)';
+    }else if(rank===1){
+      /* NOTE(수정): 가장 강한 주장인 "가장 많습니다"가 정작 표본 크기를 감추고 있었습니다.
+         6개 분기 중 1위와 31개 분기 중 1위는 무게가 다르므로 개수를 함께 밝힙니다. */
+      rankTxt='<b style="color:var(--grn);">'+since+'년 이후 '+vals.length+'개 '+unitWord+' 중 가장 많습니다</b>';
+    }else if(rank===vals.length){
+      rankTxt='<b style="color:var(--red);">'+since+'년 이후 '+vals.length+'개 '+unitWord+' 중 가장 적습니다</b>';
+    }else if(rank<=3){
+      rankTxt=since+'년 이후 '+vals.length+'개 '+unitWord+' 중 <b>'+rank+'번째로 많습니다</b>';
+    }else{
+      rankTxt=since+'년 이후 '+vals.length+'개 '+unitWord+' 중 '+rank+'번째';
+    }
+  }else if(vals.length>=3){
+    rankTxt=vals.length+'개 '+unitWord+' 중 '+rank+'번째 <span style="color:var(--t2);">(표본이 적어 참고용)</span>';
+  }else if(vals.length>=2){
+    rankTxt='<span style="color:var(--t2);">비교할 기간이 '+vals.length+'개뿐입니다</span>';
+  }
+  if(rankTxt)bits.push(rankTxt);
+  var sent=bits.join(', ');
+  if(sent&&!/니다|번째$/.test(sent))sent+='';
+  /* 평균 대비는 괄호로 덧붙임 */
+  if(vals.length>=4){
+    var avg=vals.reduce(function(a,b){return a+b;},0)/vals.length;
+    if(avg>0){
+      var mult=cur/avg;
+      if(mult>=1.3||mult<=0.77)sent+=' (평균의 '+mult.toFixed(1)+'배)';
+    }
+  }
+  return sent;
+}
 function deltaHtml(cur,prev){
   if(!prev)return'<span class="hl-delta flat">비교 기간 없음</span>';
   var d=(cur-prev)/Math.abs(prev)*100;
@@ -1966,41 +2037,70 @@ function renderExecHeadline(){
         +(_fseProgress&&_fseProgress.total?' ('+_fseProgress.cur.toLocaleString()+'/'+_fseProgress.total.toLocaleString()+'행)':'')+'</div>';
     }
     if(agg.emptyByFilter&&agg.emptyByFilter[key]){
-      return'<div style="font-size:10px;color:var(--amb);margin-top:4px;font-weight:600;">\u26a0 선택한 기간에 이 항목 데이터가 없습니다</div>';
+      return'<div style="font-size:10.5px;color:var(--amb);margin-top:6px;font-weight:600;line-height:1.5;">\u26a0 선택한 기간에 이 항목 데이터가 없습니다</div>';
     }
     var lastK=agg.last[key];
+    /* NOTE(수정): 값이 0인데 아무 설명이 없으면 "정말 0인지, 데이터가 없는 건지" 알 수 없습니다.
+       실제로 장비 데이터가 없는 기간을 필터하면 "0대 / 직전 분기 0대 → 0대 — 0.0%"만 떴습니다. */
+    var curVal=c[key];
+    if(!curVal){
+      return lastK
+        ? '<div style="font-size:10.5px;color:var(--amb);margin-top:6px;font-weight:600;line-height:1.5;">\u26a0 이 기간에는 기록이 없습니다. 데이터가 있는 마지막 '+(_execTrendMode==='y'?'해':'분기')+'는 '+escHtml(fmtPeriodKo(lastK,_execTrendMode))+'입니다.</div>'
+        : '<div style="font-size:10.5px;color:var(--t2);margin-top:6px;line-height:1.5;">이 항목은 아직 데이터가 없습니다.</div>';
+    }
     if(!lastK||lastK===cur)return'';
-    return'<div style="font-size:10px;color:var(--amb);margin-top:4px;font-weight:600;">\u26a0 이 항목 데이터는 '+escHtml(lastK)+'까지만 있습니다</div>';
+    return'<div style="font-size:10.5px;color:var(--amb);margin-top:6px;font-weight:600;line-height:1.5;">\u26a0 이 항목 데이터는 '+escHtml(fmtPeriodKo(lastK,_execTrendMode))+'까지만 있습니다</div>';
   }
-  function ctxOf(field){return trendContext(agg.keys,agg.rows,field,cur,_execTrendMode);}
+  var periodKo=fmtPeriodKo(cur,_execTrendMode);
+  var prevKo=prev?fmtPeriodKo(prev,_execTrendMode):'';
+  /* 직전 대비를 "68대 → 81대 (+19.1%)" 처럼 실제 값으로 보여준다 — %만 있으면 감이 안 온다 */
+  /* NOTE(가독성): fmtKRW는 10억 이상을 정수로 반올림해서, 12.7억과 13.0억이 둘 다 "13억"으로
+     찍혔습니다. 그러면 "13억 → 13억 ▲+2.6%" 처럼 읽는 사람이 납득할 수 없는 줄이 됩니다.
+     두 값의 표기가 같아지면 자릿수를 한 단계 늘려 실제 차이가 보이게 합니다. */
+  function fmtKRW1(v){
+    var abs=Math.abs(v),sign=v<0?'-':'';
+    if(abs>=100000000)return sign+(abs/100000000).toFixed(1)+'억';
+    if(abs>=10000)return sign+Math.round(abs/10000).toLocaleString()+'만원';
+    return sign+Math.round(abs).toLocaleString()+'원';
+  }
+  function cmpLine(curV,prevV,f){
+    if(prev==null||prevV==null)return'<span style="color:var(--t2);">비교할 직전 기간이 없습니다</span>';
+    /* 둘 다 0이면 "0대 → 0대 — 0.0%"가 되어 읽는 의미가 없다 */
+    if(!curV&&!prevV)return'<span style="color:var(--t2);">직전 기간에도 기록이 없습니다</span>';
+    if(curV!==prevV&&f(curV)===f(prevV))f=fmtKRW1;
+    var d=prevV?((curV-prevV)/Math.abs(prevV)*100):0;
+    var cls=Math.abs(d)<0.05?'flat':(d>0?'up':'dn');
+    var arrow=cls==='flat'?'—':(d>0?'▲':'▼');
+    return'<span style="color:var(--t2);">직전 '+(_execTrendMode==='y'?'해':'분기')+'</span> '+f(prevV)
+      +' <span style="color:var(--t2);">→</span> <b>'+f(curV)+'</b> '
+      +'<span class="hl-delta '+cls+'" style="margin:0 0 0 4px;">'+arrow+' '+(d>0?'+':'')+d.toFixed(1)+'%</span>';
+  }
+  function daeFmt(v){return fmtN(v)+'대';}
+  function sentOf(field){return trendSentence(agg.keys,agg.rows,field,cur,_execTrendMode);}
   var cards=[
-    {key:'consum',cls:'s1',label:'소모품 매출',sub:cur+' · Canister 10% 환산 포함',val:fmt(c.consum),
-     delta:deltaHtml(c.consum,p&&p.consum),ctx:ctxOf('consum'),
-     foot:'Canister · Tip · 일반 소모품',stale:staleNote('consum')},
-    {key:'brick',cls:'s2',label:'서비스 매출 (BRICK)',sub:cur+' · Service Team 기준',val:fmtKRW(c.brick),
-     delta:deltaHtml(c.brick,p&&p.brick),ctx:ctxOf('brick'),
-     foot:'PBI2_DATA · Shipped Local',stale:staleNote('brick')},
-    {key:'fse',cls:'s3',label:'서비스 매출 (FSE WO)',sub:cur+' · Work Order 기준',val:fmtKRW(c.fse),
-     delta:deltaHtml(c.fse,p&&p.fse),ctx:ctxOf('fse'),
-     foot:'FSE_DATA · Credit Memo 반영 순매출',stale:staleNote('fse')},
-    {key:'units',cls:'s4',label:'장비 판매',sub:cur+' · 소모품 매출의 동력',val:fmtN(c.units)+'대',
-     delta:deltaHtml(c.units,p&&p.units),ctx:ctxOf('units'),
-     foot:'System 판매현황 탭과 같은 출처 (수동 확인 데이터)',
-     stale:(function(){
-       var live=c.unitsLive||0;
-       if(!live||live===c.units)return'';
-       return'<div style="font-size:10px;color:var(--amb);margin-top:4px;font-weight:600;">\u26a0 구글시트 실시간 집계는 '+fmtN(live)+'대 — 두 값이 다릅니다 (진단 참고)</div>';
-     })()}
+    {key:'consum',cls:'s1',label:'소모품 매출',
+     tip:'Canister·Tip·일반 소모품 판매액. Canister 4종은 규정에 따라 판매액의 10%만 매출로 반영합니다. 출처: RAW_DATA 시트',
+     val:fmt(c.consum),cmp:cmpLine(c.consum,p&&p.consum,fmt),sent:sentOf('consum'),stale:staleNote('consum')},
+    {key:'brick',cls:'s2',label:'서비스 매출 (팀 위치 기준)',sublabel:'PBI2 시트',
+     tip:'서비스팀 위치(BRICK)별로 집계한 서비스 매출. 출처: PBI2_DATA 시트, Shipped Local(원화) 기준',
+     val:fmtKRW(c.brick),cmp:cmpLine(c.brick,p&&p.brick,fmtKRW),sent:sentOf('brick'),stale:staleNote('brick')},
+    {key:'fse',cls:'s3',label:'서비스 매출 (작업지시 기준)',sublabel:'FSE 시트',
+     tip:'엔지니어 작업지시(Work Order)별로 집계한 서비스 매출. Credit Memo(반품·조정)를 차감한 순매출. 출처: FSE_DATA 시트',
+     val:fmtKRW(c.fse),cmp:cmpLine(c.fse,p&&p.fse,fmtKRW),sent:sentOf('fse'),stale:staleNote('fse')},
+    {key:'units',cls:'s4',label:'장비 판매 대수',sublabel:'금액이 아니라 대수입니다',
+     tip:'GMPP·PicoWay·Vbeam·Cryo 7 등 장비 판매 대수. 장비가 팔리면 그 장비용 소모품과 서비스 매출이 따라옵니다. 출처: System 판매현황 탭과 동일(수동 확인 데이터)',
+     val:fmtN(c.units)+'대',cmp:cmpLine(c.units,p&&p.units,daeFmt),sent:sentOf('units'),
+     stale:staleNote('units')}
   ];
   grid.innerHTML=cards.map(function(k){
     return'<div class="hl-card '+k.cls+'">'
-      +'<div class="hl-label">'+k.label+'</div>'
-      +'<div class="hl-sublabel">'+escHtml(k.sub)+'</div>'
+      +'<div class="hl-label">'+k.label
+        +'<span class="hl-info" title="'+esc(k.tip)+'">?</span></div>'
+      +'<div class="hl-sublabel">'+escHtml(periodKo)+(k.sublabel?' &middot; '+k.sublabel:'')+'</div>'
       +'<div class="hl-value">'+k.val+'</div>'
-      +'<div>'+k.delta+'<span style="font-size:10.5px;color:var(--t2);margin-left:6px;">전'+unitLbl+' 대비</span></div>'
-      +(k.ctx?'<div class="hl-ctx">'+k.ctx+'</div>':'')
-      +'<div class="hl-foot">'+k.foot+'</div>'
-      +'<div id="hl-stale-'+k.key+'">'+k.stale+'</div>'
+      +'<div class="hl-cmp">'+k.cmp+'</div>'
+      +(k.sent?'<div class="hl-ctx">'+k.sent+'</div>':'')
+      +k.stale
       +'</div>';
   }).join('');
 
