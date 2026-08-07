@@ -220,9 +220,22 @@ tr:hover td{background:rgba(9,132,227,.04);}
 .hl-delta.flat{background:rgba(99,110,114,.1);color:var(--t1);}
 .hl-cmp{font-size:11.5px;color:var(--tx);margin-top:9px;line-height:1.6;}
 .hl-ctx{font-size:11.5px;color:var(--tx);margin-top:8px;line-height:1.55;padding:7px 10px;background:var(--s2);border-radius:7px;}
-.hl-info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--b1);color:var(--t1);font-size:9px;font-weight:800;margin-left:5px;cursor:help;vertical-align:1px;}
-.hl-info:hover{background:var(--acc);color:#fff;}
-.hl-label{display:flex;align-items:center;}
+/* NOTE(수정): 브라우저 기본 title 툴팁에 의존했더니 14px짜리 아이콘 위에서 1~2초를
+   가만히 있어야 뜨는 탓에 "아무것도 안 나온다"는 상황이 됐습니다. 즉시 뜨는 툴팁으로 교체하고,
+   클릭 영역도 넓혔습니다(키보드 포커스로도 열립니다). */
+/* position을 주지 않는다 — 툴팁의 기준(containing block)이 17px 아이콘이 되면
+   left:0;right:0 이 아이콘 폭으로 잡혀 툴팁이 세로 막대가 된다. 기준은 .hl-label. */
+.hl-info{display:inline-flex;align-items:center;justify-content:center;
+  width:17px;height:17px;border-radius:50%;background:var(--b1);color:var(--t1);
+  font-size:11px;font-weight:800;margin-left:6px;cursor:help;flex-shrink:0;outline:none;}
+.hl-info:hover,.hl-info:focus{background:var(--acc);color:#fff;}
+.hl-tip{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:60;
+  background:#2d3436;color:#fff;font-size:11.5px;font-weight:500;line-height:1.6;
+  padding:10px 12px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.22);
+  white-space:normal;text-align:left;letter-spacing:0;}
+.hl-tip::before{content:'';position:absolute;bottom:100%;left:14px;border:6px solid transparent;border-bottom-color:#2d3436;}
+.hl-info:hover .hl-tip,.hl-info:focus .hl-tip{display:block;}
+.hl-label{display:flex;align-items:center;position:relative;}
 .act-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
 @media(max-width:800px){.act-grid{grid-template-columns:1fr;}}
 .act-card{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--b0);border-left:4px solid var(--b1);border-radius:11px;padding:12px 15px;cursor:pointer;transition:box-shadow .15s,transform .15s;}
@@ -2095,7 +2108,8 @@ function renderExecHeadline(){
   grid.innerHTML=cards.map(function(k){
     return'<div class="hl-card '+k.cls+'">'
       +'<div class="hl-label">'+k.label
-        +'<span class="hl-info" title="'+esc(k.tip)+'">?</span></div>'
+        +'<span class="hl-info" tabindex="0" aria-label="설명 보기">?'
+        +'<span class="hl-tip">'+escHtml(k.tip)+'</span></span></div>'
       +'<div class="hl-sublabel">'+escHtml(periodKo)+(k.sublabel?' &middot; '+k.sublabel:'')+'</div>'
       +'<div class="hl-value">'+k.val+'</div>'
       +'<div class="hl-cmp">'+k.cmp+'</div>'
