@@ -1870,11 +1870,37 @@ function execAggregate(mode){
      그래서 (a) 기준은 "매출이 존재하는 마지막 기간"으로 잡고,
      (b) 갈래별 마지막 기간을 따로 구해 기준과 다르면 화면에 알립니다. */
   var revKeys=keys.filter(function(k){var v=out[k];return(v.consum+v.brick+v.fse)>0;});
+  /* NOTE(수정): 기준 기간을 "매출이 있는 마지막 기간"으로만 고르면, 한 갈래(예: FSE)에만
+     미래 날짜 데이터가 섞여 있을 때 그 분기가 기준이 되어 나머지 카드가 전부 비어버립니다.
+     실제로 오늘이 2026년 8월인데 FSE에 2026Q4 행이 있어서 기준이 2026Q4로 잡히고
+     소모품·BRICK·장비가 모두 "0 / —"로 표시되는 일이 있었습니다.
+     그래서 (a) 아직 오지 않은 기간은 후보에서 빼고,
+             (b) 남은 후보 중 "데이터가 있는 매출 갈래 수"가 가장 많은 기간을 고르되
+                 같은 조건이면 가장 최근을 씁니다. */
+  function isFuture(k){
+    var now=new Date();
+    if(mode==='y')return parseInt(String(k),10)>now.getFullYear();
+    var mm=String(k).match(/^(\d{4})Q([1-4])$/);
+    if(!mm)return false;
+    var y=parseInt(mm[1],10),q=parseInt(mm[2],10);
+    var cy=now.getFullYear(),cq=Math.floor(now.getMonth()/3)+1;
+    return y>cy||(y===cy&&q>cq);
+  }
+  function streamCount(k){var v=out[k];return(v.consum>0?1:0)+(v.brick!==0?1:0)+(v.fse!==0?1:0);}
+  var candidates=revKeys.filter(function(k){return!isFuture(k);});
+  var baseKeys=candidates;
+  if(candidates.length){
+    var best=0;
+    candidates.forEach(function(k){var s=streamCount(k);if(s>best)best=s;});
+    baseKeys=candidates.filter(function(k){return streamCount(k)===best;});
+  }
+  /* 미래 기간에 데이터가 있으면 알려준다 — 날짜 오류일 수도, 선매출일 수도 있다 */
+  var futureKeys=revKeys.filter(isFuture);
   function lastWith(fn){for(var i=keys.length-1;i>=0;i--){if(fn(out[keys[i]]))return keys[i];}return'';}
   /* 필터 때문에 특정 갈래가 통째로 비었는지 — 헤드라인에서 "0원"과 구분해 표시하기 위함 */
   var emptyByFilter={consum:cSel.emptyByFilter,brick:bSel.emptyByFilter,fse:fSel.emptyByFilter,units:false};
   return{
-    keys:keys,rows:out,revKeys:revKeys,emptyByFilter:emptyByFilter,
+    keys:keys,rows:out,revKeys:revKeys,baseKeys:baseKeys,futureKeys:futureKeys,emptyByFilter:emptyByFilter,
     last:{consum:lastWith(function(v){return v.consum>0;}),
           brick:lastWith(function(v){return v.brick!==0;}),
           fse:lastWith(function(v){return v.fse!==0;}),
@@ -2030,8 +2056,8 @@ function renderExecHeadline(){
   var grid=document.getElementById('exec-headline');
   if(!grid)return;
   var agg=execAggregate(_execTrendMode);
-  /* 기준은 매출이 존재하는 마지막 기간. 매출이 아예 없으면 전체 마지막 기간으로 폴백. */
-  var base=agg.revKeys.length?agg.revKeys:agg.keys;
+  /* 기준 기간은 execAggregate가 고른다 (미래 기간 제외 + 데이터가 가장 많이 겹치는 기간). */
+  var base=(agg.baseKeys&&agg.baseKeys.length)?agg.baseKeys:(agg.revKeys.length?agg.revKeys:agg.keys);
   if(!base.length){grid.innerHTML='<div class="card" style="grid-column:1/-1;padding:22px;text-align:center;color:var(--t2);font-size:12px;">표시할 데이터가 없습니다.</div>';return;}
   var cur=base[base.length-1],prev=base[base.length-2];
   var c=agg.rows[cur],p=prev?agg.rows[prev]:null;
@@ -2121,11 +2147,18 @@ function renderExecHeadline(){
   var note=document.getElementById('exec-headline-note');
   if(note){
     var extra='';
-    var allLast=agg.keys[agg.keys.length-1];
-    if(allLast&&allLast!==cur){
-      extra='<br>장비 데이터는 <b>'+escHtml(allLast)+'</b>까지 있지만, 매출이 집계된 마지막 '+unitLbl+'가 <b>'+escHtml(cur)+'</b>이라 이 기준으로 맞췄습니다.';
+    /* 기준보다 뒤에 부분 데이터만 있는 기간이 있으면 왜 그 기간을 안 골랐는지 밝힌다 */
+    var laterPartial=agg.revKeys.filter(function(k){return k>cur;});
+    if(laterPartial.length){
+      extra='<br>'+escHtml(fmtPeriodKo(laterPartial[laterPartial.length-1],_execTrendMode))+'까지 일부 항목에 값이 있지만, '
+        +'<b>모든 항목이 함께 집계된 마지막 '+unitLbl+'</b>가 '+escHtml(fmtPeriodKo(cur,_execTrendMode))+'이라 이 기준으로 맞췄습니다.';
     }
-    note.innerHTML='기준 '+unitLbl+': <b>'+escHtml(cur)+'</b>'+(prev?' (직전 '+escHtml(prev)+'과 비교)':'')
+    if(agg.futureKeys&&agg.futureKeys.length){
+      extra+='<br><span style="color:var(--amb);font-weight:700;">\u26a0 아직 오지 않은 기간('
+        +escHtml(agg.futureKeys.map(function(k){return fmtPeriodKo(k,_execTrendMode);}).join(', '))
+        +')에 데이터가 있습니다.</span> 선매출이거나 날짜가 잘못 입력됐을 수 있으니 확인해 보세요.';
+    }
+    note.innerHTML='기준 '+unitLbl+': <b>'+escHtml(fmtPeriodKo(cur,_execTrendMode))+'</b>'+(prev?' (직전 '+escHtml(fmtPeriodKo(prev,_execTrendMode))+'과 비교)':'')
       +' &nbsp;·&nbsp; 상단 연도/분기 필터를 걸면 이 숫자도 함께 좁혀집니다.'+extra
       +'<br><b>주의</b> — BRICK과 FSE는 서로 다른 시트에서 오고 겹치는지 확인되지 않아 <b>합산하지 않았습니다</b>. 합계가 필요하면 두 시트의 중복 여부를 먼저 확인해야 합니다.';
   }
